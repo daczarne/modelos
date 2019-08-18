@@ -1,6 +1,6 @@
-#$##################
-#### PR?CTICO 1 ####
-#$##################
+####################
+#### PRÁCTICO 1 ####
+####################
 
 library(tidyverse)
 library(MASS)
@@ -106,7 +106,7 @@ for(i in 1:length(cars$dist)){ycent[i] = cars$dist[i] - ybar}
 beta1 = sum(xcent * ycent) / sum(xcent^2)
 beta0 = ybar - beta1 * xbar
 
-lm(dist ~ speed, data=cars)$coef #Verificaci?n
+lm(dist ~ speed, data=cars)$coef #Verificación
 
 #### SE PIDE b ####
 
@@ -173,9 +173,9 @@ beta0 = reg$coefficients[1,1]
 beta1 = reg$coefficients[2,1]
 
 
-#$########################
+##########################
 #### EJERCICIO EN R 3 ####
-#$########################
+##########################
 
 # Leo el pdf con R para extraer la base y pegarla en un txt
 txt <- pdf_text("Pr?ctico 1.pdf")
@@ -244,6 +244,6 @@ tplot <- qplot(1:2, 1:2, geom="blank") +
 
 multiplot(p1, p2, p3, p4, p5, tplot, cols=3)
 
-#$##############################
-#### FIN DE LA PROGRAMACI?N ####
-#$##############################
+################################
+#### FIN DE LA PROGRAMACIÓN ####
+################################

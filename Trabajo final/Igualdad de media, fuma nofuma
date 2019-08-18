@@ -1,0 +1,12 @@
+
+	Welch Two Sample t-test
+
+data:  nofumagest and sifumagest
+t = 4.0157, df = 347.68, p-value = 7.266e-05
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.4632092 1.3525254
+sample estimates:
+mean of x mean of y 
+ 39.06028  38.15242 
+

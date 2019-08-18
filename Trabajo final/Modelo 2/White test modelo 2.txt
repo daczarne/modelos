@@ -1,0 +1,36 @@
+
+Call:
+lm(formula = resi2 ~ educ * gest + educ * fuma + educ * I(gest^3) + 
+    gest * fuma + gest * I(gest^3) + fuma * I(gest^3) + I(educ^2) + 
+    I(gest^2) + I(I(gest^3)^2), data = naci)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-307729 -169082 -105830   48057 1973036 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)  
+(Intercept)       9.581e+07  6.704e+07   1.429   0.1532  
+educ             -1.066e+05  2.262e+05  -0.471   0.6377  
+gest             -1.430e+07  1.038e+07  -1.378   0.1684  
+fumasi            2.201e+05  9.936e+05   0.222   0.8247  
+I(gest^3)        -2.171e+04  1.729e+04  -1.256   0.2095  
+I(educ^2)         1.723e+03  1.026e+03   1.679   0.0935 .
+I(gest^2)         8.183e+05  6.196e+05   1.321   0.1869  
+I(I(gest^3)^2)   -1.277e-02  1.238e-02  -1.032   0.3024  
+educ:gest         3.414e+03  9.806e+03   0.348   0.7278  
+educ:fumasi       1.104e+04  1.242e+04   0.889   0.3742  
+educ:I(gest^3)   -1.177e+00  2.649e+00  -0.444   0.6569  
+gest:fumasi      -2.544e+04  4.140e+04  -0.615   0.5390  
+gest:I(gest^3)    2.380e+02  2.008e+02   1.185   0.2362  
+fumasi:I(gest^3)  1.022e+01  1.110e+01   0.921   0.3574  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 287900 on 1101 degrees of freedom
+Multiple R-squared:  0.01669,	Adjusted R-squared:  0.005075 
+F-statistic: 1.437 on 13 and 1101 DF,  p-value: 0.1354
+
+[1] "lambda ="         "18.6039561397798"
+[1] "chi = "           "22.3620324948269"
+[1] "No rechazo H0 => Homo"

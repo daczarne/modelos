@@ -1,0 +1,30 @@
+
+Call:
+lm(formula = resi2 ~ educ * gest + educ * fuma + fuma * gest + 
+    I(educ^2) + I(gest^2), data = naci)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-279345 -173045 -104048   44594 1996275 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)  
+(Intercept)  -49433.7  1065050.2  -0.046    0.963  
+educ         -14431.6    61408.7  -0.235    0.814  
+gest          21406.3    43053.5   0.497    0.619  
+fumasi      -546178.3   319864.6  -1.708    0.088 .
+I(educ^2)      1653.5     1028.0   1.609    0.108  
+I(gest^2)      -201.4      488.2  -0.413    0.680  
+educ:gest      -732.2     1593.6  -0.459    0.646  
+educ:fumasi   12317.5    12446.0   0.990    0.323  
+gest:fumasi    9455.9     7323.3   1.291    0.197  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 290800 on 1106 degrees of freedom
+Multiple R-squared:  0.009112,	Adjusted R-squared:  0.001945 
+F-statistic: 1.271 on 8 and 1106 DF,  p-value: 0.2545
+
+[1] "lambda ="         "10.1604149767654"
+[1] "chi = "           "15.5073130558655"
+[1] "No rechazo H0 => Homo"

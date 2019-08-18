@@ -1,0 +1,12 @@
+
+	Welch Two Sample t-test
+
+data:  nofumapeso and sifumapeso
+t = 7.209, df = 400.02, p-value = 2.834e-12
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 245.5800 429.7411
+sample estimates:
+mean of x mean of y 
+ 3300.999  2963.338 
+

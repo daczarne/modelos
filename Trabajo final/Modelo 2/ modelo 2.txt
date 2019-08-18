@@ -1,0 +1,26 @@
+
+Call:
+lm(formula = modelo, data = naci)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1364.87  -294.06   -10.15   291.46  1476.04 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -4.375e+03  6.272e+02  -6.976 5.22e-12 ***
+educ         1.547e+01  6.503e+00   2.378   0.0176 *  
+fumasi      -1.746e+02  3.211e+01  -5.439 6.59e-08 ***
+gest         2.132e+02  2.642e+01   8.071 1.80e-15 ***
+I(gest^3)   -1.406e-02  7.070e-03  -1.988   0.0470 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 442.8 on 1110 degrees of freedom
+Multiple R-squared:  0.5132,	Adjusted R-squared:  0.5115 
+F-statistic: 292.6 on 4 and 1110 DF,  p-value: < 2.2e-16
+
+[1] "AIC"
+[1] 16758.89
+[1] "BIC"
+[1] 16788.99

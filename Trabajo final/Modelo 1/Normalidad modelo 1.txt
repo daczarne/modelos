@@ -1,0 +1,12 @@
+
+	Shapiro-Wilk normality test
+
+data:  resi
+W = 0.99829, p-value = 0.334
+
+
+	Jarque Bera Test
+
+data:  resi
+X-squared = 3.2236, df = 2, p-value = 0.1995
+

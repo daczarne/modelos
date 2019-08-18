@@ -1,0 +1,620 @@
+\documentclass[spanish,A4,12pt]{article}
+
+\usepackage{float}
+\usepackage{textcomp}
+\usepackage{bbold}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{tasks}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{forest}
+\usepackage[ansinew]{inputenc}
+\usepackage{mathtools}
+\usepackage{multicol}
+\usepackage[spanish,es-lcroman]{babel}
+%\usepackage[dvips]{graphicx}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{delarray}
+\usepackage{dcolumn}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{psfrag}
+\usepackage{multirow,hhline}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{pstricks}
+\usepackage{pst-plot}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{wasysym}
+\usepackage{booktabs}
+\usepackage{lscape}
+\usepackage{url}
+\usepackage{nicefrac}
+\usepackage{setspace}
+\usepackage[pdftex=true,bookmarks=true,bookmarksopen=false]{hyperref}
+%\usepackage[]{natbib}
+%\usepackage{flexbib}
+\usepackage {hyperref}
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=blue
+  }
+
+\usepackage[sf,sl,outermarks]{titlesec}
+\setlength{\parindent}{0.5in}
+\setlength{\parskip}{1em}
+
+\titleformat{\section}
+{\normalfont\Large\scshape\bfseries} {\thesection.}{1em}{}
+
+\titleformat{\subsection}
+{\normalfont\large\scshape\bfseries} {\thesubsection.}{1em}{}
+
+\titleformat{\subsubsection}
+{\normalfont\scshape\bfseries} {\thesubsubsection.}{1em}{}
+
+\hypersetup{pdfborder = {0 0 0 0}}%Para eliminar los cuadros de los links
+
+\newcommand{\m}[1]{\mathbf{ #1 }}
+\newcommand{\p}{\partial}
+\newcommand{\pr}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\prv}[2]{{\partial #1}/{\partial #2}}
+
+\definecolor{respuesta}{rgb}{0.00,0.00,0.00}
+\newcommand{\re}[1]{\smallskip \textsc{Respuesta} \begin{sf}\\{ \textcolor{respuesta}{#1
+}} \end{sf}}
+
+\usepackage[left=2.5cm,top=2.5cm,right=2.5cm,bottom=2.5cm]{geometry}
+\hyphenpenalty=15000 \pretolerance=2000 \tolerance=3000
+%\linespread{1.5}
+
+\setcounter{section}{0}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definición}
+\newtheorem{example}{Ejemplo}
+\newtheorem{observation}{Observación}
+\newtheorem{exercise}{Ejercicio}
+\newtheorem{problem}{Problema}
+\newtheorem{adexercise}{Ejercicio Adicional}
+
+\tikzset{
+	every picture/.append style={
+		execute at begin picture={\deactivatequoting},
+		execute at end picture={\activatequoting}
+	}
+}
+\tikzset{>=latex}
+
+\everymath{\displaystyle}
+\renewcommand{\arraystretch}{1}
+
+% Crea el símbolo matemático de diferencial
+\DeclareMathOperator*{\di}{\mathrm{d}\!}
+\def\at{
+  \left.
+  \vphantom{\int}
+  \right|
+}
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\lhead{Informe final} 
+\rhead{Czarnievicz, Coudet}
+
+\begin{document}
+
+\linespread{1}
+\input{./titleT.tex}
+\newpage
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+\pagenumbering{roman}   % i, ii, iii, iv, ...
+
+\tableofcontents
+
+\newpage
+
+\pagenumbering{arabic}  % 1, 2, 3, 4, ...
+
+\section{Introducción}
+
+El objetivo de este trabajo es implementar las técnicas de análisis estudiadas en el curso de modelos lineales, en particular, el modelo de regresión lineal múltiple. 
+
+En una primera instancia, se procederá a hacer un análisis descriptivo de los datos. Posteriormente, se estimará el modelo con el total de las variables explicativas, y se evaluará significación individual y significación global del mismo.
+
+En la etapa de diagnóstico del modelo, mediante herramental estadístico y análisis visual de gráficos auxiliares se testeará normalidad de los errores, así como también la homoscedasticidad de los residuos. En función de los resultados obtenidos en esta etapa, se estimarán algunos modeos alternativos. No se ensayaron pruebas de restricciones lineales sobre los parámetros por no contar con un marco teórico que justificara dichas pruebas.
+
+Por último, se utilizarán técnicas de \textit{Cross Validation} para obtener estimaciones del Error Cuadrático Medio de los distintos modelos. Para ellos se perseguirán dos enfoques: \textit{LOOCV}, y \textit{k-fold CV} con k=10.
+
+A lo largo de este trabajo se utilizará un nivel de significación del 5\% ($\alpha = 0.05$). Se utilizará la letra $k$ para designar a la cantidad de regresores de los modelos, y se utilizará la letra $n$ para designar la cantidad de observaciones en el modelo ($n=1\,115$).
+
+\section{Descripción de la base}
+
+Para este informe se trabajó con una base de nacimientos. La misma consta de 1115 observaciones de nacimientos y con las siguiente variables:
+\begin{enumerate}
+\item \textit{educ}: variable categórica que toma valores entre los enteros 0 y 17 según los años de educación completados por la madre.
+\item \textit{fuma}: variable dicotómica que toma valores 1 si la madre fuma y 0 si la madre no fuma.
+\item \textit{gest}: variable categórica que mide el tiempo de gestación del recién nacido (en semanas), y toma valores entre los enteros 20 y 40.
+\end{enumerate}
+
+Es importante destacar que una de las limitaciones con la que se cuenta es no tener información sobre cuáles de las observaciones refieren a nacidos vivos y cuáles no, lo cual sería de gran utilidad en particular al momento de analizar heteroscedasticidad.
+
+A efectos de tener un primer acercamiento con la estructura subyacente en la base de datos, se obtienen algunas estadísticas descriptivas.
+
+\newpage
+
+\begin{center}
+	\textbf{Tabla 1}: estadísticos descriptivos de las variables. \\
+	\vspace{0.5cm}
+	\begin{tabular}{| c | >{\centering\arraybackslash} m{3cm} | >{\centering\arraybackslash} m{3cm} | >{\centering\arraybackslash} m{3cm} |}
+	\hline
+	\hline
+	& \textbf{Peso del nacido} & \textbf{Educación de la madre} & \textbf{Tiempo de gestación} \\
+	\hline
+	\hline
+	\textbf{Mín.} & 284 & - & 20,00 \\
+	\hline
+	\textbf{1st Q} & 2.900 & 11,00 & 38,00 \\
+	\hline
+	\textbf{Median} & 3.267 & 12,00 & 39,00 \\
+	\hline
+	\textbf{Mean} & 3.220 & 12,27 & 38,84 \\
+	\hline
+	\textbf{3rd Q} & 3.630 & 13,00 & 40,00 \\
+	\hline
+	\textbf{Max.} & 4.830 & 17,00 & 43,00 \\
+	\hline
+	\end{tabular}
+\end{center}
+
+En la \textbf{Tabla 1} interesa notar que:
+\begin{itemize}
+\item La variable \textit{peso} varía entre un mínimo de 284 y un máximo de 4.830 gramos, con una media de 3.220.
+\item La variable \textit{educ} toma valores entre 0 y 17 años, con una media de aproximadamente 12 años.
+\item La variable \textit{gest} toma valores entre 20 y 43 semanas, con una media de aproximadamente 39.
+\end{itemize}
+
+Por su parte, la proporción de madres fumadoras en el total es de 0,759 aproximadamente.
+
+\begin{center}
+	\textbf{Tabla 2}: proporción de madres fumadoras. \\
+	\vspace{0.5cm}
+	\begin{tabular}{| c | >{\centering\arraybackslash} m{3cm} | >{\centering\arraybackslash} m{3cm} |}
+	\hline
+	\hline
+	& \textbf{Total} & \textbf{Proporción} \\
+	\hline
+	\hline
+	\textbf{Fuma} & 846 & 0,759 \\
+	\textbf{No fuma} & 269 & 0,241 \\
+	\hline
+	\textbf{Total} & 1.115 & 1,00 \\
+	\hline
+	\end{tabular}
+\end{center}
+
+En el \textbf{Gráfico 1} se presenta:
+\begin{itemize}
+\item Histograma de la variable \textit{peso}.
+\item Scatterplot de las variables \textit{peso} y \textit{educ}.
+\item Boxplot de la variable \textit{peso} según la variable \textit{fuma}.
+\item Scatterplot de las variables \textit{peso} y \textit{gest}.
+\end{itemize} 
+
+\newpage
+
+\begin{center}
+\textbf{Gráfico 1}: descripción de las variables utilizadas. \\
+\vspace{0.5cm}
+\includegraphics[scale=.5]{descvar}
+\end{center}
+
+La base parece presentar heterocedasticidad generada por la variable \textit{gest}. Los residuos de los distintos modelos fueron sometidos al test de heterocedasticidad de White, donde se pudo descartar esta situación. Es probable que la hipótesis de heterocedasticidad se rechaze por la baja cantidad de observaciones en la cola del gráfico.
+
+También se realizó una prueba de igualdad de medias para la variable peso, separando entre las madres fumadoras de las no fumadoras, descartandose que las medias fueran iguales. El análisis de ANOVA sobre la variable \textit{fuma} confirmó estos resultados.
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%
+%%%% MODELO 1 %%%%
+%%%%%%%%%%%%%%%%%%
+
+\section{Modelo 1}
+
+Como ya se mencionó, el primer modelo estimado consiste en la regresión de la variable \textit{peso}, contra las demás variables de la base. Por lo tanto, el modelo presenta la siguiente especificación:
+$$peso_i = \beta_0 + \beta_1 \; educ_i + \beta_2 \; fuma_i + \beta_3 \; gest_i + \varepsilon_i$$
+
+\begin{center}
+\textbf{Tabla 3}: estimación del modelo 1 \\
+\vspace{0.5cm}
+\includegraphics[scale=1]{m1}
+\end{center}
+
+\subsection{Significación individual de los regresores}
+
+Para cada uno de los regresores se relaiza la siguiente prueba de hipótesis:
+$$H_0) \; \; \beta_i = 0 \; \; \; \; Vs. \; \; \; \; H_1) \beta_i \neq 0$$
+
+Con región crítica: $RC = \Big\{ \Big(\bold{X}\bold{y}\Big) \, \Big/ \, |e| \geq t_{n-k-1} (1 - \, ^\alpha\!/_2) \Big\}$
+
+Para la cual se utiliza el estadístico: $e = \frac{\hat{\beta}_i}{\hat{sd}(\hat{\beta}_i)} \overset{H_0}{\sim} t_{n-k-1}$
+
+Siguiendo el criterio del p-valor, la evidencia empírica sugiere que las variables \textit{educ}, \textit{fuma}, y \textit{gest} son individualmente significativas para explicar a \textit{peso}. Con lo cual se rechaza la hipótesis nula de no significación de los regresores, a un nivel $\alpha = 0.05$.
+
+\subsection{Significación global del modelo}
+
+Para cada uno de los regresores se realizó la siguiente prueba de hipótesis:
+$$H_0) \; \; \beta_i = 0 \, \forall i=1;\ldots;k+1 \; \; \; \; Vs. \; \; \; \; H_1) \exists i / \beta_i \neq 0 \; i=1;\ldots;k+1$$
+
+Con región crítica: $RC = \Big\{ \Big(\bold{X}\bold{y}\Big) \, \Big/ \, F \geq F_{k-1;n-k-1} (1 - \alpha) \Big\}$
+
+Para la cual se utiliza el estadístico: 
+$$F = \frac{(\bold{R} \hat{\beta} - \bold{r})'[\bold{R} (\bold{X}'\bold{X})^{-1} \bold{R}']^{1} (\bold{R} \hat{\beta} - \bold{r}) / (k-1)}{\hat{\varepsilon}' \hat{\varepsilon} / (n-k-1)} \overset{H_0}{\sim} F_{k-1;n-k-1}$$
+
+donde $\bold{R} = \bold{I}_{k}$ y $\bold{r} = \bold{0}_k$.
+
+Siguiendo el criterio del p-valor, a un nivel del 5\%, la evidencia empírica sugiere que el modelo es globalmente significativo. Esto implica que, dada la evidencia empíica con la que se cuenta, no es posible rechazar la hipótesis de que los regresores utilizadas no contribuyen a explicar el regresando (\textit{peso}).
+
+\subsection{Diagnóstico del modelo}
+
+\subsubsection{Normalidad de los residuos}
+
+El histograma de los residuos estandarizados sugiere que podría llegar a ser razonable suponer distribución normal de los mismos.
+
+\begin{center}
+\textbf{Gráfico 2}: histograma de los residuos estandarizados del modelo 1. \\
+\vspace{0.5cm}
+\includegraphics[scale=.45]{resi1}
+\end{center}
+
+Por su parte, los test de normalidad Shapiro-Wilk y Jarque-Bera, según el criterio del p-valor y para un nivel de significación del 5\%, no rechazan la hipótesis nula de normalidad de los residuos. A continuación, las salidas de R correspondientes:
+
+\begin{center}
+\textbf{Tabla 4}: tests de normalidad de residuos del modelo 1 \\
+\vspace{0.5cm}
+\begin{tabular}{c c}
+	\includegraphics[scale=.9]{shapiro1}
+	&
+	\includegraphics[scale=.9]{jb1}
+\end{tabular}
+\end{center}
+
+\subsubsection{Homoscedasticidad}
+
+En una primera instancia, se optó por recurrir a un análisis visual de los residuos estandarizados del modelo especificado. A continuación vemos los gráficos de los residuos en el eje de las ordenadas, y los valores ajustados y las regresoras en el eje de las abscisas, los cuales a primera vista parecerían sugerir la existencia de heteroscedasticidad.
+
+No obstante, es importante señalar que si dejamos de lado aquellas pocas observaciones que se separan de la nube de puntos principal, como lo es en el gráfico Tiempo de gestación Vs. Residuos (observaciones con menos de 30 semanas de gestación), resulta razonable suponer que el modelo es homoscedastico. 
+
+\begin{center}
+\textbf{Gráfico 3}: análisis de los residuos estandarizados del modelo 1. \\
+\vspace{0.5cm}
+\includegraphics[scale=.6]{homo1}
+\end{center}
+
+Por lo tanto, se propone acudir a un contraste de heteroscedasticidad. El contraste de Goldfeld y Quandt no resulta apropiado dado que se entiende que, con esta estructura de datos, se estaría forzando un rechazo de homoscedasticidad al separar a las observaciones en dos grupos, uno de los cuales quedaría conformado con los considerados como potenciales ``outliers''. En virtud de ello, se entiende que una posible alternativa es realizar el contraste propuesto por White.
+
+Se sometieron los residuos a la siguiente prueba de hipótesis:
+$$H_0) \; \; \text{Homoscedasticidad} \; \; \; \; Vs. \; \; \; \; H_1) \; \; \text{Heteroscedasticidad}$$
+
+Para contrastar dicha hipótesis nula, el contraste de White propone los siguientes pasos:
+\begin{itemize}
+\item Estimar el modelo por MCO y guardar los residuos $\hat{\varepsilon}$.
+
+\item Estimar el siguiente model: $\hat{\varepsilon}^2_i = \delta_0 + \sum\limits_{j=1}^{k} \gamma_j X_{ij} + \sum\limits_{j=1}^{k} \sum\limits_{l=1}^{k} \delta_{jl}	X_{ij} X_{il} + \mu_i$ \\
+Esto implica regresar el cuadrado de los residuos de la regresión original, contra una constante, todos los regresores originalmente utilizados y sus interacciones (incluyendo con sigo mismos, es decir, cuadrados\footnote{Deben excluirse los cuadrados de las variables dicotómicas, dado que generarían problemas de multicolinealidad.}).
+
+\item Contrastar: $H_0) \; \delta_{jl} = \gamma_{j} = 0 \; \; \; \; Vs. \; \; \; \; H_1) \; \exists \; \delta_{jl} \text{ o } \gamma_{jl} \text{ distinto de cero}$.
+
+Para esto se utiliza el estadístico $\lambda = nR_{aux}^2$, el cual converge en distribución (bajo $H_0$) a una $\chi^2_p$ donde $n$ es el número de observaciones, $R_{aux}^2$ es el coeficiente de determinación de la regresión auxiliar, y $p$ es el número de regresores de la regresión auxiliar menos uno (por la constante).
+
+El test tiene la siguiente región crítica: $RC = \Big\{ \Big(\bold{X}\bold{y}\Big) \, \big/ \, \lambda \geq \chi^2_p(1 - \alpha) \Big\}$
+\end{itemize}
+
+Esta prueba presenta dos potenciales problemas: no permite determinar qué variable es la que genera heteroscedasticidad, y puede recoger problemas de especificación en el modelo original (dado que trabaja con las  interacciones de los regresores utilizados en el modelo original).
+
+A partir de la implementación de la prueba, con un $R_{aux}^2 = 0.009112$, no se rechaza la hipótesis nula de homoscedasticidad para el nivel de significación especificado.
+
+\newpage
+
+\begin{center}
+\textbf{Tabla 5}: test de White del modelo 1 \\
+\vspace{0.5cm}
+\includegraphics[scale=.9]{white1}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%
+%%%% MODELO 2 %%%%
+%%%%%%%%%%%%%%%%%%
+
+\section{Modelo 2}
+
+Como segundo modelo se estimó una regresión polinómica donde se incluyó el cubo de la variable \textit{gest}. 
+$$peso_i = \beta_0 + \beta_1 \; educ_i + \beta_2 \; fuma_i + \beta_3 \; gest_i + \beta_4 \; gest_i^3 + \varepsilon_i$$
+
+Previamente se ensayaron regresiones con el cuadrado de la variable \textit{gest}, y con el cuadrado y el cubo de dicha variable. Cuando solo se incluyó el cuadrado de la variable, el mismo resultó no significativo. Por otra parte, cuando se incluyeron tanto cubos como cuadrados solo los primeros resultaron significativos. Por principio de parsimonia, se opró por conservar únicamente el cubo de dicha variable.
+
+las pruebas de significación indivicual de los regresores, asi como la de significación global del modelo se realizaron siguiendo las mismas pruebas de hipótesis especificadas en las secciones 3.1 y 3.2. No se reproducen aquí las especificaciones de las mismas. No obstante, de la salida de R podemos ver que todos los regresores y el modelo resultaron significativos al 5\%.
+
+\newpage
+
+\begin{center}
+\textbf{Tabla 6}: estimación del modelo 2 \\
+\vspace{0.5cm}
+\includegraphics[scale=1]{m2}
+\end{center}
+
+\subsection{Diagnóstico del modelo}
+
+\subsubsection{Normalidad de los residuos}
+
+El histograma de los residuos estandarizados sugiere que podría llegar a ser razonable suponer distribución normal de los mismos.
+
+\begin{center}
+\textbf{Gráfico 4}: histograma de los residuos estandarizados del modelo 2. \\
+\vspace{0.5cm}
+\includegraphics[scale=.45]{resi2}
+\end{center}
+
+Por su parte, los test de normalidad Shapiro-Wilk y Jarque-Bera, según el criterio del p-valor y para un nivel de significación del 5\%, no rechazan la hipótesis nula de normalidad de los residuos. A continuación, las salidas de R correspondientes:
+
+\begin{center}
+\textbf{Tabla 7}: tests de normalidad de residuos del modelo 2 \\
+\vspace{0.5cm}
+\begin{tabular}{c c}
+	\includegraphics[scale=.9]{shapiro2}
+	&
+	\includegraphics[scale=.9]{jb2}
+\end{tabular}
+\end{center}
+
+\subsubsection{Homoscedasticidad}
+
+El análisis visual de los residuos lleva a conclusiones similares respecto a las del modelo 1, por lo que se procede a implementar el test de homosedasticidad de White. De la salida se desprende que no se rechaza la hipótesis nula de homoscedasticidad al 5\%.
+
+\begin{center}
+\textbf{Gráfico 5}: análisis de los residuos estandarizados del modelo 2. \\
+\vspace{0.5cm}
+\includegraphics[scale=.6]{homo2}
+\end{center}
+
+\newpage
+
+\begin{center}
+\textbf{Tabla 8}: test de White del modelo 2 \\
+\vspace{0.5cm}
+\includegraphics[scale=.9]{white2}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%
+%%%% MODELO 3 %%%%
+%%%%%%%%%%%%%%%%%%
+
+\section{Modelo 3}
+
+Por último se busca entender si existe (es estadísticamente significativa) una interacción entre las variables \textit{fuma} y \textit{gest}. Esto se debe a que, al menos desde un punto de vista teórico, parecería lógico que dicha interacción sí existiera. Para esto se estimo el siguiente modelo:
+$$peso_i = \beta_0 + \beta_1 \; educ_i + \beta_2 \; gest_i + \beta_3 \; gest_i fuma_i + \varepsilon_i$$
+
+Al igual que con el caso polinómico, aquí también se estimaron distintos modelos que buscaban contemplar la posible interacción entre las variables \textit{gest} y \textit{fuma}. En el anexo de este trabajo se presentan todos los modelos que fueron descartados.
+
+A continuación se presenta la salida correspondiente al modelo 3.
+
+\newpage
+
+\begin{center}
+\textbf{Tabla 9}: estimación del modelo 3 \\
+\vspace{0.5cm}
+\includegraphics[scale=1]{m3}
+\end{center}
+
+Una vez más, para las pruebas de significación individual de los regresores y global del modelo se siguió la especificación detallada en las secciones 3.1 y 3.2 respectivamente. Tal como se aprecia en la salida de la Tabla 9, todos las variables incluidas y el modelo resultaron significativos al 5\%.
+
+\subsection{Diagnóstico del modelo}
+
+\subsubsection{Normalidad de los residuos}
+
+El histograma de los residuos estandarizados sugiere que podría llegar a ser razonable suponer distribución normal de los mismos.
+
+Por su parte, los test de normalidad Shapiro-Wilk y Jarque-Bera, según el criterio del p-valor y para un nivel de significación del 5\%, no rechazan la hipótesis nula de normalidad de los residuos. A continuación, las salidas de R correspondientes.
+
+\newpage
+
+\begin{center}
+\textbf{Gráfico 6}: histograma de los residuos estandarizados del modelo 3. \\
+\vspace{0.5cm}
+\includegraphics[scale=.5]{resi3}
+\end{center}
+
+\begin{center}
+\textbf{Tabla 10}: tests de normalidad de residuos del modelo 3 \\
+\vspace{0.5cm}
+\begin{tabular}{c c}
+	\includegraphics[scale=.8]{shapiro3}
+	&
+	\includegraphics[scale=.8]{jb3}
+\end{tabular}
+\end{center}
+
+\subsubsection{Homoscedasticidad}
+
+El análisis visual de los residuos lleva a conclusiones similares respecto a las del modelo 1, por lo que se procede a implementar el test de homosedasticidad de White. De la salida correspondiente a la Tabla 11 se desprende que no se rechaza la hipótesis nula de homoscedasticidad al 5\%.
+
+\newpage
+
+\begin{center}
+\textbf{Gráfico 7}: análisis de los residuos estandarizados del modelo 3. \\
+\vspace{0.5cm}
+\includegraphics[scale=.6]{homo2}
+\end{center}
+
+\begin{center}
+\textbf{Tabla 11}: test de White del modelo 3 \\
+\vspace{0.5cm}
+\includegraphics[scale=.9]{white3}
+\end{center}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% SELECCIÓN DEL MODELO %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Selección del modelo}
+
+Existen varios métodos para seleccionar entre distintos modelos. En la siguient tabla se reportan el coeficiente de determinación $R^2$ asi como también su versión ajustada $R^2_a$. Por otra parte, se reportan tambien los criterios de información $AIC$ y $BIC$ para cada modelo.
+
+\begin{center}
+	\textbf{Tabla 12}: selección de modelos. \\
+	\vspace{0.5cm}
+	\begin{tabular}{c | c | c | c | c}
+	& $\bold{R^2}$ & $\bold{R^2_a}$ & $\bold{AIC}$ & $\bold{BIC}$ \\
+	\hline
+	\textbf{M1} & 0,5115 & 0,5102 & 16.760,85 & 16.785,94 \\
+	\hline
+	\textbf{M2} & 0,5132 & 0,5115 & 16.758,89 & 16.788,99 \\
+	\hline
+	\textbf{M3} & 0,5114 & 0,5101 & 16.760,92 & 16.786,00
+	\end{tabular}
+\end{center}
+
+Salvo por el críterio BIC, todos los demás criterios señalan al modelo 2 como el que mejor explica la varianza en el regresando (\textit{peso}).
+
+Por otra parte podrían también implementarse métodos basados en los críterios de información, como ser el método \textit{Forward} o el método \textit{Backward}. Estos métodos se vuelven muy útiles cuando se desconoce la distribución de los residuos, y por tanto, se vuelve compleja la relaización de inferencia sobre los parámetros\footnote{En estos casos también podrían obtenerse regiones críticas mediante \textit{Bootstrap}}. Pero en nuestro caso, para todos lo modelos ensayados, la normalidad no fue un problema, por lo que no se justifica su uso (dado que podemos recurrir a pruebas de hipótesis).
+
+\subsection{Cross-Validation}
+
+No obstante todo lo anterior, tal vez la técnica más poderosa de selección de modelos sea la validación cruzada. Para este trabajo se utilizaron dos enforques de la misma, \textit{LOOCV}\footnote{Leave-one-out cross-validation} y \textit{k-fold CV}. En ambos casos el objetivos es estimar el \textit{test error} del modelo.
+
+El procedimiento de \textit{Cross-Validation} es el siguiente. Primero se separa la base de datos en dos, una de testeo, y una de entrenamiento. Luego se utiliza la base de entrenamiento para estimar el modelo. Acto seguido se utiliza el modelo para predecir el regresando en la base de testeo. Por último se calcula el error cuadrático medio de dichas predicciones.
+
+La diferencia entre \textit{LOOCV} y \textit{k-fold CV} pasa por la selección de la partición de la base a utilizar. Mientras en \textit{LOOCV} se entrenan $n$ modelos con $n-1$ observaciones cada uno, en \textit{k-fold CV} se toman $k$ particiones aproximadamente iguales de la base. Luego, en cada etapa, una de dichas particiones es utilizada como base de testeo, y las demás se utilizan para estimar el modelo. De nuevo, luego de realizado esto se calcula el promedio de los errores cuadráticos medios de cada submuestra.
+
+\begin{center}
+	\begin{tabular}{>{\centering\arraybackslash} m{3cm} c >{\centering\arraybackslash} m{1cm} c}
+	& \textit{LOOCV} & & \textit{k-fold CV} \\
+	\textbf{Error Cuadrático Medio estimado} & $CV_{(n)} = \frac{1}{n} \sum\limits_{i=1}^{n} ECM_i$ & & $CV_{(n)} = \frac{1}{k} \sum\limits_{i=1}^{k} ECM_i$
+	\end{tabular}
+\end{center}
+
+A continuación se presentan los resultados de los métodos de cross-validation implementados para los tres modelos.
+
+\begin{center}
+	\textbf{Tabla 13}: cross-validation. \\
+	\vspace{0.5cm}
+	\begin{tabular}{c | c | c}
+	& \textit{LOOCV} & \textit{k-fold CV} \\
+	\hline
+	\textbf{M1} & 197.246,7 & 197.272,6 \\
+	\textbf{M2} & 196.950,2 & 197.110,8 \\
+	\textbf{M3} & 197.254,7 & 196.842,3
+	\end{tabular}
+\end{center}
+
+Por métodos de \textit{LOOCV} el modelo a elegir sería el modelo 2, pero por \textit{k-fold CV} deberíamos quedarnos con el modelo 3. Dado que los demás criterios de selección brindaron evidencia respecto de la capacidad del modelo 2, este fue el seleccionado por el equipo.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% OBSERVACIONES INFLUYENTES %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Observaciones influyentes}
+
+En el presenta apartado presentamos los resultados encontrados en el análisis de observaciones influyentes.
+
+Se comenzó utilizando el método de clustering agregativo por single-linkage. Este método es muy sencible a la presencia de observaciones atípicas, por lo que tiene una muy buena performance a la hora de detectar observaciones influyentes en un modelo lineal, en tanto y en cuanto no se utilice con todas las variables, sino con los regresores únicamente. Tal como se observa en el gráfico 8, únicamente las observaciones 2, 4, y 6 toman valores atípicos en los regresores. Por ser solo tres, no parece que su influencia en el modelo pueda ser muy grande. No obstante se realizó un estudio de \textit{leverage} y de distancias de Cook para corroborar esta afirmación. Los resultados de dicho análisis se presentan en los gráficos 9, 10, y 11. Estos sugieren que son otras las observaciones influyentes, pero nuevamente, la capacidad de influir de estas es baja.
+
+\newpage
+
+\begin{center}
+\textbf{Gráfico 8}: clustering de regresores (dingle-linkage). \\
+\vspace{0.5cm}
+\includegraphics[scale=.5]{agnes}
+\end{center}
+
+\begin{center}
+\textbf{Gráfico 9}: distancia de Cook para cada observación. \\
+\vspace{0.5cm}
+\includegraphics[scale=.5]{cook}
+\end{center}
+
+\newpage
+
+\begin{center}
+\textbf{Gráfico 10}: distancias de Cook Vs. leverage. \\
+\vspace{0.5cm}
+\includegraphics[scale=.5]{cookvslev}
+\end{center}
+
+\begin{center}
+\textbf{Gráfico 11}: residuos estandarizados Vs. leverage. \\
+\vspace{0.5cm}
+\includegraphics[scale=.5]{resivslev}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% INTERPRETACIÓN Y CONCLUSIONES %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Interpretación de los resultados y conclusiones}
+
+Habiendo seleccionado un modelo adecuado para explicar el peso de los recien nacidos en función de las variables \textit{gest}, \textit{fuma}, y \textit{educ}, procedemos a interpretar los resultados del mismo.
+
+\begin{itemize}
+\item Cosntante: sin interpretación para el intercepto.
+\item Educación: antes un aumento de uno en los años de educación de la madre, se espera un aumento de 15,47 gramos en el peso del recien nacido, \textit{ceteris paribus}.
+\item Fuma: se espera que el peso de los recien nacidos está 174,6 gramos por debajo de la media cuando la madre es fumadora, \textit{ceteris paribus}.
+\item Ante un aumento de una semana de gestación se espera que el peso del recien nacido aumente en $\hat{\beta}_3 + 2 \hat{\beta}_4 \; gest_i^2$, \textit{ceteris paribus}. Nótese que el efecto de la cantidad de semanas de gestación sobre el peso esperado del recien nacido no es lineal y constante, sino que depende del punto de comparación.
+\end{itemize}
+
+De esto puede concluirse que mejorar el nivel de educación de las madres, así como implementar campañas contra el tabaquismo mejoraría los embarazos y ayudarían a prevenir el nacimiento de niños de bajo peso, lo cual pone en riesgo vida del recién nacido.
+
+\newpage
+
+\section*{Anexo - Modelos descartados}
+\addcontentsline{toc}{section}{Anexo - Modelos descartados}
+
+\subsection*{Polinomios de educación}
+\addcontentsline{toc}{subsection}{Polinómios de educación}
+
+\begin{center}
+\includegraphics[scale=.8]{md1} \\
+\vspace{0.5cm}
+\includegraphics[scale=.8]{md2} \\
+\includegraphics[scale=.8]{md3}
+\end{center}
+
+\subsection*{Polinomios de educación y gestación}
+\addcontentsline{toc}{subsection}{Polinómios de educación y gestación}
+
+\begin{center}
+\includegraphics[scale=.8]{md4}
+\end{center}
+
+\subsection*{Interacción entre fumadora y gestación}
+\addcontentsline{toc}{subsection}{Interacción entre fumadora y gestación}
+
+\begin{center}
+\includegraphics[scale=.8]{md5} \\
+\vspace{0.5cm}
+\includegraphics[scale=.8]{md6} \\
+\includegraphics[scale=.8]{md7}
+\end{center}
+
+\section*{Bibliogrfía}
+\addcontentsline{toc}{section}{Bibliografía}
+
+\begin{itemize}
+\item Carmona (2003) - Modelos lineales
+\item Gallego Gómez - Apuntes de econometría
+\item Hastie, Tibshirani, et al.  (2013) - An introduction to statistical learning with applications in R
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,1022 @@
+---
+title: "Entrega"
+author: "Daniel Czarnievicz"
+date: "2017"
+output: pdf_document
+header-includes:
+   - \usepackage[spanish]{babel}
+   - \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+   - \DeclareMathOperator*{\di}{\mathrm{d}\!}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Una aclaración previa importante**
+
+Salvo que se indique lo contrario en la letra del ejercicio, o en la solución aquí propuesta, siempre se está asumiendo que en las distintas situaciones planteadas se está trabajando bajo los supuestos de la regresión lineal. En particular, el supuesto de que la matriz $\mathbf{X}$ es de rango completo por columnas fue utilizado ampliamente, sin aclaración explícita en las soluciones.
+
+# Práctico 1
+
+## Ejercicio 1
+
+$$Z \sim \chi_d^2 \Rightarrow Z \sim \text{Gamma} \left( \frac{d}{2}; \frac{1}{2} \right) \Rightarrow f_Z (z) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} \, z^{\alpha - 1} \, e^{- \beta z} \, \text{I}_{[z \geq 0]}$$
+
+\begin{itemize}
+\item Esperanza de $Z$
+
+$$E(Z)= \int_0^{+\infty} z \, \frac{\beta^{\alpha}}{\Gamma(\alpha)} \, z^{\alpha - 1} \, e^{-\beta z} \di z = \frac{\beta^{\alpha}}{\Gamma(\alpha)} \frac{\Gamma(\alpha + 1)}{\beta^{\alpha + 1}} \underbrace{\int_0^{+\infty} \frac{\beta^{\alpha + 1}}{\Gamma(\alpha + 1)} \, z^{(\alpha + 1) - 1} \, e^{-\beta z} \di z}_{=1}  = $$
+$$ = \frac{\beta^{\alpha}}{\Gamma(\alpha)} \frac{\Gamma(\alpha + 1)}{\beta^{\alpha + 1}} = \frac{\beta^{\alpha}}{\Gamma(\alpha)} \, \frac{\alpha \Gamma(\alpha)}{\beta^{\alpha} \, \beta} = \frac{\alpha}{\beta} \Rightarrow E(Z) = \frac{^d/_2}{^1/_2} \Rightarrow \color{blue}\boxed{E(Z)=d}$$
+
+\item Varianza de $Z$: $V(Z)= E(Z^2)-E^2(Z) $
+	\begin{itemize}
+	\item Esperanza de $Z^2$
+	$$E(Z^2)= \int_0^{+\infty} z^2 \, \frac{\beta^{\alpha}}{\Gamma(\alpha)} \, z^{\alpha - 1} \, e^{-\beta z} \di z = \frac{\beta^{\alpha}}{\Gamma(\alpha)} \frac{\Gamma(\alpha + 2)}{\beta^{\alpha + 2}} \underbrace{\int_0^{+\infty} \frac{\beta^{\alpha + 2}}{\Gamma(\alpha + 2)} \, z^{(\alpha + 2) - 1} \, e^{-\beta z} \di z}_{=1}  = $$
+	$$= \frac{\beta^{\alpha}}{\Gamma(\alpha)} \frac{\Gamma(\alpha + 2)}{\beta^{\alpha + 2}} = \frac{\beta^{\alpha}}{\Gamma(\alpha)} \, \frac{\alpha (\alpha + 1) \Gamma(\alpha)}{\beta^{\alpha} \, \beta^2} = \frac{\alpha (\alpha + 1)}{\beta^2}$$
+	
+	\item Varianza de $Z$:
+	
+	$$ V(Z) = \frac{\alpha (\alpha + 1)}{\beta^2} - \left(\frac{\alpha}{\beta}\right)^2 = \frac{\alpha}{\beta^2} \left(\alpha + 1 - \alpha \right) = \frac{\alpha}{\beta} \Rightarrow V(Z) = \frac{^d/_2}{^1/_4} = \frac{4d}{2} \Rightarrow \color{blue}\boxed{V(Z)=2d}$$
+	\end{itemize}
+\end{itemize}
+
+## Ejercicio 2
+
+\begin{enumerate}
+\item $\sum \limits_{i=1}^{n} e_i = \sum \limits_{i=1}^{n} \Big( y_i - \hat{y}_i \Big) = \sum \limits_{i=1}^{n} y_i - \sum \limits_{i=1}^{n} \Big( \hat{\beta}_0 + \hat{\beta}_1 x_i \Big) = \sum \limits_{i=1}^{n} y_i - n \hat{\beta}_0 - \hat{\beta}_1 \sum \limits_{i=1}^{n} x_i = $
+
+$= \bar{y} - \hat{\beta}_0 - \hat{\beta}_1 \bar{x} = \bar{y} - \Big( \bar{y} - \hat{\beta}_1 \bar{x} \Big) - \hat{\beta}_1 \bar{x} = 0 \Rightarrow \color{blue}\boxed{\sum \limits_{i=1}^{n} e_i=0}$
+
+\item Si $\sum \limits_{i=1}^{n} e_i = 0 \Rightarrow \sum \limits_{i=1}^{n} \Big( y_i - \hat{y}_i \Big) = 0 \Rightarrow \color{blue}\boxed{\sum \limits_{i=1}^{n} y_i = \sum \limits_{i=1}^{n} \hat{y}_i}$
+
+\item $\sum \limits_{i=1}^{n} x_i e_i = \sum \limits_{i=1}^{n} x_i \Big( y_i - \hat{y}_i \Big) = \sum \limits_{i=1}^{n} x_i y_i - \sum \limits_{i=1}^{n} x_i \hat{y}_i = \sum \limits_{i=1}^{n} x_i y_i - \sum \limits_{i=1}^{n} x_i \Big( \hat{\beta}_0 + \hat{\beta}_1 x_i \Big) =$
+
+\vspace{.5cm}
+
+$= \sum \limits_{i=1}^{n} x_i y_i - \hat{\beta}_0 \sum \limits_{i=1}^{n} x_i - \hat{\beta}_1 \sum \limits_{i=1}^{n} x_i^2 = \sum \limits_{i=1}^{n} x_i y_i - \Big( \bar{y} - \hat{\beta}_1 \bar{x}\Big) \sum \limits_{i=1}^{n} x_i - \hat{\beta}_1 \sum \limits_{i=1}^{n} x_i^2 = $
+
+\vspace{.5cm}
+
+$= \sum \limits_{i=1}^{n} x_i y_i - \bar{y} \underbrace{\sum \limits_{i=1}^{n} x_i}_{n \bar{x}} + \hat{\beta}_1 n \bar{x}^2 - \hat{\beta}_1 \sum \limits_{i=1}^{n} x_i^2 = \hat{\beta}_1 \Big( \sum \limits_{i=1}^{n} x_i^2 - n \bar{x}^2 \Big) -\hat{\beta}_1 \Big( \sum \limits_{i=1}^{n} x_i^2 - n \bar{x}^2 \Big) \Rightarrow$
+
+$\Rightarrow \color{blue}\boxed{\sum \limits_{i=1}^{n} x_i e_i = 0}$
+
+\item $\sum \limits_{i=1}^{n} \hat{y}_i e_i = \sum \limits_{i=1}^{n} \Big( \hat{\beta}_0 + \hat{\beta}_1 x_i \Big) e_i = \hat{\beta}_0 \underbrace{\sum \limits_{i=1}^{n} e_i}_{=0} + \hat{\beta}_1 \underbrace{\sum \limits_{i=1}^{n} x_i e_i}_{=0}\Rightarrow \color{blue}\boxed{\sum \limits_{i=1}^{n} \hat{y}_i e_i = 0}$
+
+\item $\sum \limits_{i=1}^{n} \Big( y_i - \bar{y} \Big)^2 = \sum \limits_{i=1}^{n} \Big( y_i - \hat{y}_i + \hat{y}_i - \bar{y}\Big)^2 = $
+
+\vspace{.5cm}
+
+$= \sum \limits_{i=1}^{n} \Big(\hat{y}_i - \bar{y} \Big)^2 + 2 \underbrace{\sum \limits_{i=1}^{n} \Big( y_i - \hat{y}_i\Big) \Big( \hat{y}_i - \bar{y} \Big)}_{\sum \limits_{i=1}^{n} e_i \Big( \hat{y}_i - \bar{y} \Big) = \sum \limits_{i=1}^{n} e_i \hat{y}_i - \bar{y} \sum \limits_{i=1}^{n} e_i} + \sum \limits_{i=1}^{n} \Big(y_i - \hat{y}_i \Big)^2 = $
+
+\vspace{.5cm}
+
+$= \sum \limits_{i=1}^{n} \Big(\hat{y}_i - \bar{y} \Big)^2 + 2 \underbrace{\sum \limits_{i=1}^{n} e_i \hat{y}_i}_{=0} - \bar{y} \underbrace{\sum \limits_{i=1}^{n} e_i}_{=0} + \sum \limits_{i=1}^{n} \Big(y_i - \hat{y}_i \Big)^2 \Rightarrow$
+
+$\Rightarrow \color{blue}\boxed{\sum \limits_{i=1}^{n} \Big( y_i - \bar{y} \Big)^2 = \sum \limits_{i=1}^{n} \Big(\hat{y}_i - \bar{y} \Big)^2 + \sum \limits_{i=1}^{n} \Big(y_i - \hat{y}_i \Big)^2}$
+
+\item Interpretación geométrica:
+	\begin{enumerate}
+	\item $\mathbf{\mathbb{1}}' \mathbf{e} = \mathbf{0}$, implica que el vector de residuos es ortogonal a un vector de unos.
+	\item $\mathbf{\mathbb{1}}' \mathbf{y} = \mathbf{\mathbb{1}}'\mathbf{\hat{y}}$
+	\item $\mathbf{x}'\mathbf{e} = \mathbf{0}$, implica ortogonalidad entre los regresores y los residuos.
+	\item $\mathbf{y}'\mathbf{e} = \mathbf{0}$, implica ortogonalidad entre el regresando y los residuos.
+	\item Implica que $\| \mathbf{y} - \mathbf{\bar{y}} \|^2 = \| \mathbf{\hat{y}} - \mathbf{\bar{y}} \|^2 + \| \mathbf{y} - \mathbf{\hat{y}} \|^2$
+	\end{enumerate}
+\end{enumerate}
+
+## Ejercicio 3
+
+\begin{itemize}
+\item Estimador MCO
+$$\hat{\theta}_{MCO} = (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y}) = 
+\left(
+\begin{bmatrix}
+2 & 1
+\end{bmatrix}
+\begin{bmatrix}
+2 \\
+1
+\end{bmatrix}
+\right)^{-1}
+\left(
+\begin{bmatrix}
+2 & 1
+\end{bmatrix}
+\begin{bmatrix}
+y_1 \\
+y_2
+\end{bmatrix}
+\right)
+\Rightarrow \color{blue}\boxed{\hat{\theta}_{MCO}= \frac{1}{5} \Big( 2y_1 + y_2 \Big)}$$
+
+\item Suma de Cuadrados de Residuos (SSR):
+$$SSR = \mathbf{y}'\mathbf{y} - \hat{\theta}(\mathbf{X'\mathbf{y}}) = \Big( y_1^2 + y_2^2 \Big) - \frac{1}{5} \Big( 2 y_1 + y_2 \Big)^2 = $$
+$$= y_1^2 + y_2^2 - \frac{4}{5} \, y_1^2 - \frac{4}{5} \, y_1 \, y_2 - \frac{1}{5} \, y_2^2 = \frac{y_1^2}{5} + \frac{4y_2^2}{5} - \frac{4}{5} \, y_1 \, y_2 \Rightarrow \color{blue}\boxed{ SSR = \frac{1}{5} \Big( y_1 - 2y_2 \Big)^2}$$
+\end{itemize}
+
+## Ejercicio 4
+
+Caso general:
+$$\min \limits_{\hat{\beta}} \Big\{ \hat{\mathbf{u}}'\hat{\mathbf{u}} \Big\} = \min \limits_{\hat{\beta}} \Big\{ (\mathbf{y} - \mathbf{X} \hat{\beta})' (\mathbf{y} - \mathbf{X} \hat{\beta}) \Big\} = \min \limits_{\hat{\beta}} \Big\{ \mathbf{y}'\mathbf{y} - \mathbf{y}'\mathbf{X} \hat{\beta} - \hat{\beta}'\mathbf{X}'\mathbf{y} + \hat{\beta}'\mathbf{X}'\mathbf{X} \hat{\beta} \Big\} =$$
+
+$$= \min \limits_{\hat{\beta}} \Big\{ \mathbf{y}'\mathbf{y} - 2 \hat{\beta}'\mathbf{X}'\mathbf{y} + \hat{\beta}'\mathbf{X}'\mathbf{X} \hat{\beta} \Big\}$$
+
+$$\frac{\partial (\mathbf{\hat{u}}'\mathbf{\hat{u}}) }{\partial \hat{\beta}'} = -2 \mathbf{X}'\mathbf{y} + 2 \mathbf{X}'\mathbf{X} \hat{\beta} = \mathbf{0}_{k+1} \Rightarrow (\mathbf{X}'\mathbf{X}) \hat{\beta} = (\mathbf{X}'\mathbf{y}) \Rightarrow \color{blue}\boxed{\hat{\beta} = (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y})}$$
+
+$$\frac{\partial^2 (\mathbf{\hat{u}}'\mathbf{\hat{u}}) }{\partial^2 \hat{\beta}} = \frac{\partial}{\partial \hat{\beta}} \left( \mathbf{X}'\mathbf{X}\hat{\beta} - \mathbf{X}'\mathbf{y} \right) = \mathbf{X}'\mathbf{X} > 0 \Rightarrow \hat{\beta} \text{ es mínimo}$$
+
+Para el modelo $y_i = \beta_0 + \beta_1 x_i + u_i \, \, \forall i=1;\ldots;n$
+
+\begin{center}
+	\begin{tabular}{c c c c c c}
+	$\mathbf{X} = 	\begin{pmatrix}
+				1 & x_1 \\
+				1 & x_2 \\
+				\vdots & \vdots \\
+				1 & x_n
+				\end{pmatrix} $
+	&
+	$\mathbf{y} =	\begin{pmatrix}
+				y_1 \\
+				y_2 \\
+				\vdots \\
+				y_n
+				\end{pmatrix}$
+	&
+	$\Rightarrow$
+	&
+	$(\mathbf{X}'\mathbf{X}) =	\begin{pmatrix}
+							n & \sum\limits_{i=1}^{n} x_i \\
+							\sum\limits_{i=1}^{n} x_i & \sum\limits_{i=1}^{n} x_i^2 \\
+							\end{pmatrix} $
+	&
+	$(\mathbf{X}'\mathbf{y}) = 	\begin{pmatrix}
+							\sum\limits_{i=1}^{n} y_i \\
+							\sum\limits_{i=1}^{n} x_iy_i
+							\end{pmatrix}$
+	
+	\end{tabular}
+\end{center}
+
+Por lo tanto,
+
+$$\hat{\beta} = 	\begin{pmatrix}
+					\hat{\beta}_0 \\
+					\hat{\beta}_1
+					\end{pmatrix} = \begin{pmatrix}
+									\bar{y} - \hat{\beta}_1 \bar{x} \\
+									\frac{S_{XY}}{S^2_{X}}
+									\end{pmatrix}$$
+
+\vspace{.5cm}
+
+## Ejercicio 5
+
+\begin{enumerate}
+\item 
+	\begin{itemize}
+	\item $\bar{u} = \frac{1}{n} \sum\limits_{i=1}^{n} \frac{x_i - \bar{x}}{S_X} = \frac{1}{nS_X} \left(\sum\limits_{i=1}^{n} x_i - n\bar{x} \right) = \frac{1}{nS_X} \left(n\bar{x} - n\bar{x} \right) = 0$
+	
+	\vspace{.5cm}
+	
+	\item $\bar{v} = \frac{1}{n} \sum\limits_{i=1}^{n} \frac{y_i - \bar{y}}{S_Y} = \frac{1}{nS_Y} \left(\sum\limits_{i=1}^{n} y_i - n\bar{y} \right) = \frac{1}{nS_Y} \left(n\bar{y} - n\bar{y} \right) = 0$
+	
+	\item $S^2_u = \frac{1}{n} \sum\limits_{i=1}^{n} (u_i - \bar{u})^2 = \frac{1}{n} \sum\limits_{i=1}^{n} u_i^2 - \bar{u}^2 = \frac{1}{n} \sum\limits_{i=1}^{n} \left( \frac{x_i - \bar{x}}{S_X} \right)^2 = \frac{1}{S_X^2} \left( \underbrace{\frac{1}{n} \sum\limits_{i=1}^{n} (x_i - \bar{x})^2}_{S_X^2} \right) =$
+	
+	$= \frac{1}{S_X^2} \, S_X^2 = 1$
+	
+	\item $S^2_v = \frac{1}{n} \sum\limits_{i=1}^{n} (v_i - \bar{v})^2 = \frac{1}{n} \sum\limits_{i=1}^{n} v_i^2 - \bar{v}^2 = \frac{1}{n} \sum\limits_{i=1}^{n} \left( \frac{y_i - \bar{y}}{S_Y} \right)^2 = \frac{1}{S_Y^2} \left( \underbrace{\frac{1}{n} \sum\limits_{i=1}^{n} (y_i - \bar{y})^2}_{S_Y^2} \right) =$
+	
+	$= \frac{1}{S_Y^2} \, S_Y^2 = 1$
+	
+	\item $\hat{b}_1 = (\mathbf{u}'\mathbf{u})^{-1} (\mathbf{u}'\mathbf{v}) = \left( \sum\limits_{i=1}^{n} u_i^2 \right)^{-1} \left( \sum\limits_{i=1}^{n} u_i v_i \right) = \frac{\frac{1}{n} \sum\limits_{i=1}^{n} u_i v_i }{\frac{1}{n} \sum\limits_{i=1}^{n} u_i^2} = \frac{S_{uv}}{ \underbrace{S^2_u}_{=1}} =$
+	
+	$= \frac{1}{n} \sum\limits_{i=1}^{n} \left( \frac{x_i - \bar{x}}{S_X} \right) \left( \frac{y_i - \bar{y}}{S_Y} \right) = \frac{1}{S_XS_Y} \left( \frac{1}{n} \sum\limits_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y} \right) = \frac{S_{XY}}{S_XS_Y}$
+	
+	\vspace{.5cm}
+		
+	Por lo tanto: $\hat{b}_1 \, \frac{S_Y}{S_X} = \frac{S_{XY}}{S_XS_Y} \, \frac{S_Y}{S_X} = \frac{S_{XY}}{S_X^2} \, \frac{S_Y}{S_Y} = \frac{S_{XY}}{S_X^2} = \hat{\beta}_1$
+	
+	\vspace{.5cm}
+	
+	\item $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x} \; \; \;$ se desprende de la derivación de $\hat{\beta}_{MCO}$
+	\end{itemize}
+
+\item Usando las demostraciones del punto 1, tenemos que:
+
+$$\left.
+\begin{array}{c c}
+r_{uv} = \frac{S_{uv}}{S_uS_v} \\[1.5em]
+\hat{b}_1 = \frac{S_{uv}}{S_u^2} \\[1.5em]
+S_u = S_v = 1
+\end{array}
+\right\}
+\Rightarrow
+\hat{b}_1 = S_{uv} = r_{uv}$$
+\end{enumerate}
+
+## Ejercicio 6
+
+$$\hat{\beta} = (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y}) = \frac{1}{n \sum\limits_{i=1}^{n} x_i^2- \left(\sum\limits_{i=1}^{n} x_i\right)^2} \begin{pmatrix}
+								\sum\limits_{i=1}^{n} x_i^2 & -\sum\limits_{i=1}^{n} x_i \\[1.5em]
+								-\sum\limits_{i=1}^{n} x_i & n
+								\end{pmatrix}
+								\begin{pmatrix}
+								\sum\limits_{i=1}^{n} y_i \\[1.5em]
+								\sum\limits_{i=1}^{n} x_i y_i
+								\end{pmatrix}$$
+
+Por lo tanto:
+
+$$\hat{\beta}_1 = \frac{- \left(\sum\limits_{i=1}^{n} x_i \right) \left( \sum\limits_{i=1}^{n} y_i \right) + n \sum\limits_{i=1}^{n} x_iy_i}{n \sum\limits_{i=1}^{n} x_i^2- \left(\sum\limits_{i=1}^{n} x_i\right)^2} = \frac{\frac{1}{n} \sum\limits_{i=1}^{n} x_iy_i - \bar{x} \bar{y} }{\frac{1}{n} \sum\limits_{i=1}^{n} x_i^2 - \bar{x}^2} = \frac{S_{XY}}{S_X^2} = $$
+
+$$= \frac{\frac{1}{n} \sum\limits_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{\frac{1}{n} \sum\limits_{i=1}^{n} (x_i -\bar{x})^2} \Rightarrow \color{blue}\boxed{\hat{\beta}_1 = \frac{\sum\limits_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{\sum\limits_{i=1}^{n} (x_i -\bar{x})^2}}$$
+
+$$\hat{\beta}_0 = \frac{ \left( \sum\limits_{i=1}^{n} x_i^2 \right) \left( \sum\limits_{i=1}^{n} y_i \right) - \left( \sum\limits_{i=1}^{n} x_i \right) \left( \sum\limits_{i=1}^{n} x_iy_i \right)}{n \sum\limits_{i=1}^{n} x_i^2 - \left( \sum\limits_{i=1}^{n} x_i \right)^2} = \frac{\frac{1}{n^2} \left[ \left( \sum\limits_{i=1}^{n} x_i^2 \right) \left( \sum\limits_{i=1}^{n} y_i \right) - \left( \sum\limits_{i=1}^{n} x_i \right) \left( \sum\limits_{i=1}^{n} x_iy_i \right) \right]}{\frac{1}{n^2} \left[ n \sum\limits_{i=1}^{n} x_i^2 - \left( \sum\limits_{i=1}^{n} x_i \right)^2 \right]} = $$
+
+$$= \frac{\frac{1}{n^2} \sum\limits_{i=1}^{n} x_i^2 \sum\limits_{i=1}^{n} y_i }{S_X^2} - \frac{\frac{1}{n^2} \sum\limits_{i=1}^{n} x_i \sum\limits_{i=1}^{n} x_iy_i}{S_X^2} = \bar{y} \, \frac{\frac{1}{n} \sum\limits_{i=1}^{n} x_i^2}{S_X^2} - \bar{x} \, \frac{\frac{1}{n} \sum\limits_{i=1}^{n} x_iy_i}{S_X^2} = $$
+
+$$= \bar{y} \left( \frac{\frac{1}{n} \sum\limits_{i=1}^{n} x_i^2 - \bar{x}^2 + \bar{x}^2}{S_X^2} \right) - \bar{x} \left( \frac{\frac{1}{n} \sum\limits_{i=1}^{n} x_iy_i - \bar{x} \bar{y} + \bar{x} \bar{y}}{S_X^2} \right) = $$
+
+$$= \bar{y} \left( \frac{\frac{1}{n} \sum\limits_{i=1}^{n} x_i^2 - \bar{x}^2}{S_X^2} \right) + \frac{\bar{y} \bar{x}^2}{S_X^2} - \bar{x} \left( \frac{\frac{1}{n} \sum\limits_{i=1}^{n} x_iy_i - \bar{x} \bar{y}}{S_X^2} \right) - \frac{\bar{x}^2 \bar{y}}{S_X^2} = $$
+
+$$=\bar{y} \, \frac{S_X^2}{S_X^2} - \bar{x} \, \frac{S_{XY}}{S_X^2} \Rightarrow \color{blue}\boxed{\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}}$$
+
+
+## Ejercicio 7
+
+Partimos de la distribución de $Y$: $Y \sim N_n \Big( \mathbf{X} \beta; \, \sigma^2_{\varepsilon} \mathbf{I}_n \Big)$
+
+\begin{itemize}
+\item Estimadores máximo verosímiles
+
+$$\mathcal{L}(\beta_0;\beta_1; \sigma^2_{\varepsilon} | \mathbf{X};\mathbf{y}) = \prod\limits_{i=1}^{n} f_{y_i} (x_i;y_i | \beta_0;\beta_1; \sigma^2_{\varepsilon}) =$$
+
+$$= \prod\limits_{i=1}^{n} (2\pi)^{^{-1}/_2} (\sigma^2_{\varepsilon})^{^{-1}/_2} \exp\left\{ - \frac{1}{2\sigma^2_{\varepsilon}} \Big( y_i - \beta_0 - \beta_1 x_i \Big)^2 \right\} =$$
+
+$$= (2\pi)^{^{-n}/_2} (\sigma^2_{\varepsilon})^{^{-n}/_2} \exp\left\{ - \frac{1}{2\sigma^2_{\varepsilon}} \sum\limits_{i=1}^{n}\Big( y_i - \beta_0 - \beta_1 x_i \Big)^2 \right\}$$
+
+$$\mathit{l}(\beta_0;\beta_1; \sigma^2_{\varepsilon} | \mathbf{X};\mathbf{y}) = -\frac{n}{2} \log(2\pi) - \frac{n}{2} \log(\sigma^2_{\varepsilon}) - \frac{1}{2\sigma^2_{\varepsilon}} \sum\limits_{i=1}^{n}\Big( y_i - \beta_0 - \beta_1 x_i \Big)^2$$
+
+\newpage
+
+Luego entonces:
+
+$$\frac{\partial l(\cdot)}{\partial \beta_0} = - \frac{1}{2\sigma^2_{\varepsilon}} (2) \sum\limits_{i=1}^{n} \Big( y_i - \beta_0 - \beta_1 x_i \Big) (-1) = 0 \Rightarrow$$
+
+$$\Rightarrow \sum\limits_{i=1}^{n} y_i - n \beta_0 - \beta_1 \sum\limits_{i=1}^{n} x_i = 0 \Rightarrow \color{blue}\boxed{\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}}$$
+
+$$\frac{\partial l(\cdot)}{\partial \beta_1} = - \frac{1}{2\sigma^2_{\varepsilon}} (2) \sum\limits_{i=1}^{n} \Big( y_i - \beta_0 - \beta_1 x_i \Big) (-x_i) = 0 \Rightarrow$$
+
+$$\Rightarrow \sum\limits_{i=1}^{n} \Big( y_ix_i - \beta_0 x_i - \beta_1 x_i^2 \Big) = \sum\limits_{i=1}^{n} x_iy_i - \beta_0 \sum\limits_{i=1}^{n} x_i - \beta_1 \sum\limits_{i=1}^{n} x_i^2 = 0 \Rightarrow$$
+
+$$\Rightarrow \hat{\beta}_1 \sum\limits_{i=1}^{n} x_i^2 = \sum\limits_{i=1}^{n} x_iy_i - \hat{\beta}_0 \sum\limits_{i=1}^{n} x_i \Rightarrow \hat{\beta}_1 = \frac{\sum\limits_{i=1}^{n} x_i y_i}{\sum\limits_{i=1}^{n} x_i^2} - \Big( \bar{y} - \hat{\beta}_1 \bar{x} \Big) \frac{\sum\limits_{i=1}^{n} x_i}{\sum\limits_{i=1}^{n} x_i^2} \Rightarrow$$
+
+$$\Rightarrow \hat{\beta}_1 \left[ 1 - \frac{\left(\sum\limits_{i=1}^{n} x_i\right)^2}{n\sum\limits_{i=1}^{n} x_i^2} \right] = \frac{\sum\limits_{i=1}^{n} x_i y_i}{\sum\limits_{i=1}^{n} x_i^2} - \frac{\sum\limits_{i=1}^{n} y_i \sum\limits_{i=1}^{n} x_i}{n \sum\limits_{i=1}^{n} x_i^2}$$
+
+$$\Rightarrow \hat{\beta}_1 = \left( \frac{\sum\limits_{i=1}^{n} x_i y_i}{\sum\limits_{i=1}^{n} x_i^2} \right) \left( \frac{n \sum\limits_{i=1}^{n} x_i^2}{n \sum\limits_{i=1}^{n} x_i^2 - \Big( \sum\limits_{i=1}^{n} x_i \Big)^2} \right) - \left( \frac{\sum\limits_{i=1}^{n} x_i \sum\limits_{i=1}^{n} y_i}{n \sum\limits_{i=1}^{n} x_i^2} \right) \left( \frac{n \sum\limits_{i=1}^{n} x_i^2}{n \sum\limits_{i=1}^{n} x_i^2 - \Big( \sum\limits_{i=1}^{n} x_i \Big)^2} \right) \Rightarrow$$
+
+$$\Rightarrow \hat{\beta}_1 = \frac{\frac{1}{n^2} \left[n \sum\limits_{i=1}^{n} x_i y_i - \sum\limits_{i=1}^{n} x_i \sum\limits_{i=1}^{n} y_i \right]}{\frac{1}{n^2} \left[n \sum\limits_{i=1}^{n} x_i^2 - \Big(\sum\limits_{i=1}^{n} x_i\Big)^2 \right]} \Rightarrow \color{blue}\boxed{\hat{\beta}_1 = \frac{S_{XY}}{S_X^2}}$$
+
+$$\frac{\partial l(\cdot)}{\partial \sigma^2_{\varepsilon}} = - \frac{n}{2\sigma^2_{\varepsilon}} - \frac{1}{2} \left( \frac{-1}{2(\sigma^2_{\varepsilon})^2} \right) \underbrace{\sum\limits_{i=1}^{n}\Big( y_i - \beta_0 - \beta_1 x_i \Big)^2}_{\hat{\varepsilon}'\hat{\varepsilon}} = 0 \Rightarrow$$
+
+$$\Rightarrow \frac{\hat{\varepsilon}'\hat{\varepsilon}}{2(\sigma^2_{\varepsilon})^2} - \frac{n}{2\sigma^2_{\varepsilon}} = 0 \Rightarrow \frac{\hat{\varepsilon}'\hat{\varepsilon}}{(\sigma^2_{\varepsilon})^2} = \frac{n}{\sigma^2_{\varepsilon}} \Rightarrow \color{blue}\boxed{\hat{\sigma}^2_{\varepsilon} = \frac{\hat{\varepsilon}'\hat{\varepsilon}}{n} }$$
+
+\item Distribución de $\hat{\beta}$
+
+$$\left.
+\begin{array}{c}
+\hat{\beta} = (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y}) \\
+\mathbf{y} \sim N_n \Big(\mathbf{X}\beta; \, \sigma^2_{\varepsilon} \mathbf{I}_n \Big)
+\end{array}
+\right\} \Rightarrow \hat{\beta} \sim N_{k+1} \text{ por ser CL de normales}$$
+
+\item Esperanza de $\hat{\beta}$
+
+$$E(\hat{\beta}) = E \Big[ (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y})\Big] = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'E(\mathbf{y}) = (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{X}) \beta = \beta$$
+
+\item Varianza de $\hat{\beta}$
+
+$$V(\hat{\beta}) = V \Big[ (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y})\Big] = (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' V(\mathbf{y}) \left[(\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}'\right]' = $$
+
+$$= (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' \sigma^2_{\varepsilon} \mathbf{I}_n \mathbf{X} (\mathbf{X}' \mathbf{X})^{-1} = \sigma^2_{\varepsilon} (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{X}) (\mathbf{X}' \mathbf{X})^{-1} = \sigma^2_{\varepsilon} (\mathbf{X}'\mathbf{X})^{-1}$$
+\end{itemize}
+
+Por lo tanto: $\color{blue}\boxed{\hat{\beta} \sim N_{k+1} \Big(\beta; \, \sigma^2_{\varepsilon} (\mathbf{X}'\mathbf{X})^{-1} \Big)}$
+
+# Práctico 2
+
+## Ejercicio 4
+
+Partimos de la distribución de $Y$
+
+$$Y \sim N_n \Big( \mathbf{X} \beta; \, \sigma^2_{\varepsilon} \mathbf{I}_n \Big)$$
+
+\begin{itemize}
+\item Estimadores máximo verosímiles
+
+$$\mathcal{L}(\beta_0;\beta_1; \sigma^2_{\varepsilon} | \mathbf{X};\mathbf{y}) = \prod\limits_{i=1}^{n} f_{y_i} (x_i;y_i | \beta_0;\beta_1; \sigma^2_{\varepsilon}) =$$
+
+$$= \prod\limits_{i=1}^{n} (2\pi)^{^{-1}/_2} (\sigma^2_{\varepsilon})^{^{-1}/_2} \exp\left\{ - \frac{1}{2\sigma^2_{\varepsilon}} \Big( y_i - \beta_0 - \beta_1 x_i \Big)^2 \right\} =$$
+
+$$= (2\pi)^{^{-n}/_2} (\sigma^2_{\varepsilon})^{^{-n}/_2} \exp\left\{ - \frac{1}{2\sigma^2_{\varepsilon}} \sum\limits_{i=1}^{n}\Big( y_i - \beta_0 - \beta_1 x_i \Big)^2 \right\}$$
+
+$$\mathit{l}(\beta_0;\beta_1; \sigma^2_{\varepsilon} | \mathbf{X};\mathbf{y}) = -\frac{n}{2} \log(2\pi) - \frac{n}{2} \log(\sigma^2_{\varepsilon}) - \frac{1}{2\sigma^2_{\varepsilon}} \sum\limits_{i=1}^{n}\Big( y_i - \beta_0 - \beta_1 x_i \Big)^2$$
+
+Luego entonces:
+
+$$\frac{\partial l(\cdot)}{\partial \beta_0} = - \frac{1}{2\sigma^2_{\varepsilon}} (2) \sum\limits_{i=1}^{n} \Big( y_i - \beta_0 - \beta_1 x_i \Big) (-1) = 0 \Rightarrow$$
+
+$$\Rightarrow \sum\limits_{i=1}^{n} y_i - n \beta_0 - \beta_1 \sum\limits_{i=1}^{n} x_i = 0 \Rightarrow$$
+
+$$\Rightarrow \color{blue}\boxed{\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}}$$
+$$\frac{\partial l(\cdot)}{\partial \beta_1} = - \frac{1}{2\sigma^2_{\varepsilon}} (2) \sum\limits_{i=1}^{n} \Big( y_i - \beta_0 - \beta_1 x_i \Big) (-x_i) = 0 \Rightarrow$$
+
+$$\Rightarrow \sum\limits_{i=1}^{n} \Big( y_ix_i - \beta_0 x_i - \beta_1 x_i^2 \Big) = \sum\limits_{i=1}^{n} x_iy_i - \beta_0 \sum\limits_{i=1}^{n} x_i - \beta_1 \sum\limits_{i=1}^{n} x_i^2 = 0 \Rightarrow$$
+
+$$\Rightarrow \hat{\beta}_1 \sum\limits_{i=1}^{n} x_i^2 = \sum\limits_{i=1}^{n} x_iy_i - \hat{\beta}_0 \sum\limits_{i=1}^{n} x_i \Rightarrow \hat{\beta}_1 = \frac{\sum\limits_{i=1}^{n} x_i y_i}{\sum\limits_{i=1}^{n} x_i^2} - \Big( \bar{y} - \hat{\beta}_1 \bar{x} \Big) \frac{\sum\limits_{i=1}^{n} x_i}{\sum\limits_{i=1}^{n} x_i^2} \Rightarrow$$
+
+$$\Rightarrow \hat{\beta}_1 \left[ 1 - \frac{\left(\sum\limits_{i=1}^{n} x_i\right)^2}{n\sum\limits_{i=1}^{n} x_i^2} \right] = \frac{\sum\limits_{i=1}^{n} x_i y_i}{\sum\limits_{i=1}^{n} x_i^2} - \frac{\sum\limits_{i=1}^{n} y_i \sum\limits_{i=1}^{n} x_i}{n \sum\limits_{i=1}^{n} x_i^2}$$
+
+$$\Rightarrow \hat{\beta}_1 = \left( \frac{\sum\limits_{i=1}^{n} x_i y_i}{\sum\limits_{i=1}^{n} x_i^2} \right) \left( \frac{n \sum\limits_{i=1}^{n} x_i^2}{n \sum\limits_{i=1}^{n} x_i^2 - \Big( \sum\limits_{i=1}^{n} x_i \Big)^2} \right) - \left( \frac{\sum\limits_{i=1}^{n} x_i \sum\limits_{i=1}^{n} y_i}{n \sum\limits_{i=1}^{n} x_i^2} \right) \left( \frac{n \sum\limits_{i=1}^{n} x_i^2}{n \sum\limits_{i=1}^{n} x_i^2 - \Big( \sum\limits_{i=1}^{n} x_i \Big)^2} \right) \Rightarrow$$
+
+$$\Rightarrow \hat{\beta}_1 = \frac{\frac{1}{n^2} \left[n \sum\limits_{i=1}^{n} x_i y_i - \sum\limits_{i=1}^{n} x_i \sum\limits_{i=1}^{n} y_i \right]}{\frac{1}{n^2} \left[n \sum\limits_{i=1}^{n} x_i^2 - \Big(\sum\limits_{i=1}^{n} x_i\Big)^2 \right]} \Rightarrow \color{blue}\boxed{\hat{\beta}_1 = \frac{S_{XY}}{S_X^2}}$$
+
+$$\frac{\partial l(\cdot)}{\partial \sigma^2_{\varepsilon}} = - \frac{n}{2\sigma^2_{\varepsilon}} - \frac{1}{2} \left( \frac{-1}{2(\sigma^2_{\varepsilon})^2} \right) \underbrace{\sum\limits_{i=1}^{n}\Big( y_i - \beta_0 - \beta_1 x_i \Big)^2}_{\hat{\varepsilon}'\hat{\varepsilon}} = 0 \Rightarrow$$
+
+$$\Rightarrow \frac{\hat{\varepsilon}'\hat{\varepsilon}}{2(\sigma^2_{\varepsilon})^2} - \frac{n}{2\sigma^2_{\varepsilon}} = 0 \Rightarrow \frac{\hat{\varepsilon}'\hat{\varepsilon}}{(\sigma^2_{\varepsilon})^2} = \frac{n}{\sigma^2_{\varepsilon}} \Rightarrow \color{blue}\boxed{\hat{\sigma}^2_{\varepsilon} = \frac{\hat{\varepsilon}'\hat{\varepsilon}}{n} }$$
+
+\item Distribución de $\hat{\beta}$
+
+$$\left.
+\begin{array}{c}
+\hat{\beta} = (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y}) \\
+\mathbf{y} \sim N_n \Big(\mathbf{X}\beta; \, \sigma^2_{\varepsilon} \mathbf{I}_n \Big)
+\end{array}
+\right\} \Rightarrow \hat{\beta} \sim N_{k+1} \text{ por ser CL de normales}$$
+
+\item Esperanza de $\hat{\beta}$
+
+$$E(\hat{\beta}) = E \Big[ (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y})\Big] = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'E(\mathbf{y}) = (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{X}) \beta = \beta$$
+
+\item Varianza de $\hat{\beta}$
+
+$$V(\hat{\beta}) = V \Big[ (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y})\Big] = (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' V(\mathbf{y}) \left[(\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}'\right]' = $$
+
+$$= (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' \sigma^2_{\varepsilon} \mathbf{I}_n \mathbf{X} (\mathbf{X}' \mathbf{X})^{-1} = \sigma^2_{\varepsilon} (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{X}) (\mathbf{X}' \mathbf{X})^{-1} = \sigma^2_{\varepsilon} (\mathbf{X}'\mathbf{X})^{-1}$$
+\end{itemize}
+
+Por lo tanto: $\color{blue}\boxed{\hat{\beta} \sim N_{k+1} \Big(\beta; \, \sigma^2_{\varepsilon} (\mathbf{X}'\mathbf{X})^{-1} \Big)}$
+
+## Ejercicio 5
+
+Partimos del modelo:
+$$y_i = \beta_0 + \beta_1 x_i + u_i \; \; \forall i=1;\ldots;6$$
+
+De la estimación MCO obtenemos:
+$$\hat{\beta}_1 = \frac{S_{XY}}{S_X^2} = \frac{400.7}{466.7} = 0.8586$$
+$$\hat{sd}(\hat{\beta}_1) = 0.0398$$
+
+Con estos datos construimos el intervalo de confianza:
+$$IC_{\beta_1}^{95\%} = \left[ \hat{\beta}_1 \pm t_{4}(1 - \, ^\alpha/_2) \; \hat{sd}(\hat{\beta}_1) \right] \Rightarrow \color{blue}\boxed{IC_{\beta_1}^{95\%} = \left[ 0.748; \; 0.969 \right]}$$
+
+## Ejercicio 6
+
+Partimos del modelo:
+$$y_i = \beta_0 + \beta_1 x_i + u_i \; \; \forall i = 1; \ldots; 12$$
+
+De la estimación MCO obtenemos:
+$$\hat{\beta} = (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y}) = 	\begin{pmatrix}
+																-120.21 \\
+																1.11
+																\end{pmatrix}$$
+$$\hat{\sigma}^2_{\varepsilon} = \frac{\hat{\mathbf{u}}'\hat{\mathbf{u}}}{n-k-1} = 1.32$$
+
+Luego realizamos la prueba:
+$$H_0) \; \; \beta_1 = 0 \; \; \; \; Vs. \; \; \; \; H_1) \; \; \beta_1 \neq 0$$
+
+Con región crítica:
+$$RC = \Big\{ (\mathbf{X}\mathbf{y}) \; / \; |e| > t_{n-k-1}(1 - \, ^\alpha/_2) \Big\}$$
+
+Y estadístico de prueba:
+$$e = \frac{\hat{\beta}_1}{\hat{sd}(\hat{\beta}_1)} \overset{\mathrm{H_0}}{\sim} t_{n-k-1}$$
+
+Dado que $e = 11.58661 > 2.23 = t_10(0.975) \Rightarrow$ rechazo $H_0$, lo cual implica que, la altura es significativa para explicar el peso, al 95\%.
+
+\newpage
+
+## Ejercicio 7
+
+\begin{enumerate}
+\item Sea el modelo: $y_i = \beta_0 + \beta_1 t_i + u_i \; \; \forall i = 1; \ldots; 11$
+
+Para el cual se obtienen las siguientes estimaciones MCO:
+
+\begin{center}
+	\begin{tabular}{c c c}
+	$\hat{\beta} = \begin{pmatrix}
+				9.27 \\
+				1.44
+				\end{pmatrix}$
+	&
+	$\hat{V}(\hat{\beta}) = \begin{pmatrix}
+							0.2145 & 0 \\
+							0 & 0.02145
+							\end{pmatrix}$
+	&
+	$\hat{\sigma}^2_{u} = 2.36$
+	\end{tabular}
+\end{center}
+
+\item Se realiza la prueba
+$$H_0) \; \; \beta_1 = 0 \; \; \; \; Vs. \; \; \; \; H_1) \; \; \beta_1 \neq 0$$
+
+Con región crítica:
+$$RC = \Big\{ (\mathbf{X}\mathbf{y}) \; / \; |e| > t_{n-k-1}(1 - ^\alpha\!/_2) \Big\}$$
+
+Y estadístico de prueba:
+$$e = \frac{\hat{\beta}_1}{\hat{sd}(\hat{\beta}_1)} \overset{\mathrm{H_0}}{\sim} t_{n-k-1}$$
+
+Dado que $e = 9.87 > 2.26 = t_9(0.975) \Rightarrow$ rechazo $H_0$, lo cual implica que, la temperatura es significativa para explicar la cantidad producida, al 95\%.
+
+\item Predicción puntual: $\hat{E}(y|t=3) = \hat{\beta}_0 + \hat{\beta}_1 (3) = 13.58$
+Intervalo de confianza:
+$$IC_{E(y|t=3)}^{95\%} = \left[ \hat{E}(y|t=3) \pm t_9(0.975) \sqrt{\hat{\sigma}^2_{u} \begin{pmatrix}
+																						1 & 3 \\
+																						\end{pmatrix} 
+																						(\mathbf{X}'\mathbf{X})^{-1}
+																						\begin{pmatrix}
+																						1 \\
+																						3
+																						\end{pmatrix}}
+																						\;
+																						\right] = \left[ 12.44; \; 15.03 \right]$$
+
+\item Predicción puntual: $\hat{y}|t=3 = \hat{\beta}_0 + \hat{\beta}_1 (3) = 13.58$
+Intervalo de confianza:
+$$IC_{y|t=3}^{95\%} = \left[ \hat{y}|t=3 \pm t_9(0.975) \sqrt{\hat{\sigma}^2_{u} \left[ 1 +	\begin{pmatrix}
+																							1 & 3 \\
+																							\end{pmatrix} 
+																							(\mathbf{X}'\mathbf{X})^{-1}
+																							\begin{pmatrix}
+																							1 \\
+																							3
+																							\end{pmatrix} \; \right]}
+																							\;
+																							\right] = \left[9.82; \; 17.34 \right]$$
+\end{enumerate}
+
+## Ejercicio 8
+
+\begin{enumerate}
+\item Recta de regresión: $velocidad_i = 61.3 - 0.63 \; densidad_i \; \; \forall i = 1; \ldots; 24$
+\item $\sigma^2_{\varepsilon} = 16.31$; $\hat{se}(\hat{\beta}_0) = 1.96$; $\hat{se}(\hat{\beta}_1) = 0.03$
+\item $IC_{\beta_0}^{95\%} = \Big[ 57.25; \; 65.39 \Big]$; $IC_{\beta_1}^{95\%} = \Big[ -0.70; \; -0.56 \Big]$
+\item Tabla de significación del modelo:
+
+\begin{center}
+	\begin{tabular}{c | c | c | c | c}
+		& \textbf{df} & \textbf{SC} & \textbf{SCMe} & \textbf{F} \\
+		\hline
+		\textbf{Densidad} & 1 & 6002.4 & 6002.4 & 368.13 \\
+		\hline		
+		\textbf{Residuos} & 22 & 358.7 & 16.3 &	
+	\end{tabular}
+\end{center}
+
+Contraste de significación global:
+$$H_0) \; \; \beta_1 = 0 \; \; \; \; Vs. \; \; \; \; H_1) \; \; \beta_1 \neq 0$$
+
+Con región crítica:
+$$RC = \Big\{ (\mathbf{X}\mathbf{y}) \; / \; F_0 > F_{k-1; \; n-k}(1 - \alpha) \Big\}$$
+
+Y estadístico de prueba:
+$$F_0 = \frac{R^2 / (k-1)}{(1 - R^2) / (n-k)} \overset{\mathrm{H_0}}{\sim} F_{k-1; \; n-k}$$
+
+Dado que $F_0 = 368.13 > 4.3 = F_{1; \; 22}(0.95) \Rightarrow$ rechazo $H_0$, lo cual implica que, el modelos es significativo, al 95\%.
+
+\item Estimación puntual: $\hat{E}(velocidad|densidad=50) = 29.96$
+
+Intervalo de confianza: $IC_{E(velocidad|densidad=50)}^{90\%} = \Big[ 28.31; \; 31.70 \Big]$		
+
+\item Con la raíz cuadrada de la velocidad:
+	\begin{itemize}
+		\item Recta de regresión: $\sqrt{velocidad_i} = 8.09 - 0.06 \; densidad_i \; \; \forall i = 1; \ldots; 24$
+		\item $\sigma^2_{\varepsilon} = 0.07$; $\hat{se}(\hat{\beta}_0) = 0.13$; $\hat{se}(\hat{\beta}_1) = 0.002$
+		\item $IC_{\beta_0}^{95\%} = \Big[ 7.82; \; 8.36 \Big]$; $IC_{\beta_1}^{95\%} = \Big[ -0.06; \; -0.05 \Big]$
+		\item Tabla de significación del modelo:
+
+		\begin{center}
+			\begin{tabular}{c | c | c | c | c}
+				& \textbf{df} & \textbf{SC} & \textbf{SCMe} & \textbf{F} \\
+				\hline
+				$\mathbf{\sqrt{Velocidad}}$ & 1 & 48.92 & 48.92 & 676.39 \\
+				\hline		
+				\textbf{Residuos} & 22 & 1.59 & 0.072 &
+			\end{tabular}
+		\end{center}
+
+		Contraste de significación global:
+		$$H_0) \; \; \beta_1 = 0 \; \; \; \; Vs. \; \; \; \; H_1) \; \; \beta_1 \neq 0$$
+		
+		Con región crítica:
+		$$RC = \Big\{ (\mathbf{X}\mathbf{y}) \; / \; F_0 > F_{k-1; \; n-k}(1 - \alpha) \Big\}$$
+		
+		Y estadístico de prueba:
+		$$F_0 = \frac{R^2 / (k-1)}{(1 - R^2) / (n-k)} \overset{\mathrm{H_0}}{\sim} F_{k-1; \; n-k}$$
+		
+		Dado que $F_0 = 676.39 > 4.3 = F_{1; \; 22}(0.95) \Rightarrow$ rechazo $H_0$, lo cual implica que, el modelos es significativo, al 95\%.
+		
+		\item Estimación puntual: $\hat{E}(velocidad|densidad=50) = 7.689$
+		
+		Intervalo de confianza: $IC_{E(velocidad|densidad=50)}^{90\%} = \Big[ 7.576; \; 7.803 \Big]$		
+		
+	\end{itemize}
+\end{enumerate}
+
+## Ejercicio 9
+
+\begin{enumerate}
+\item Maximización del $R^2$:
+
+$$\max\{R^2\} = \max \left\{ 1 - \frac{SCR}{SCT} \right\} = \max \left\{ 1 - \frac{\mathbf{\hat{u}}'\mathbf{\hat{u}}}{\mathbf{y}'\mathbf{y} - n \bar{y}^2} \right\} = \max \left\{ 1 - \frac{(\mathbf{y}-\mathbf{X}\hat{\beta})'(\mathbf{y}-\mathbf{X}\hat{\beta})}{\mathbf{y}'\mathbf{y} - n \bar{y}^2} \right\} =$$
+
+$$= \max \left\{ 1 - \frac{\mathbf{y}'\mathbf{y} - 2 \hat{\beta}\mathbf{X}'\mathbf{y} + \hat{\beta}'\mathbf{X}'\mathbf{X}\hat{\beta}}{\mathbf{y}'\mathbf{y} - n \bar{y}^2} \right\} $$
+
+$$\frac{\partial R^2}{\partial \hat{\beta}'} = 0 - \frac{1}{\mathbf{y}'\mathbf{y} - n \bar{y}^2} \left( -2 \mathbf{X}'\mathbf{y} + 2 \mathbf{X}'\mathbf{X}\hat{\beta}\right) = 0 \Rightarrow \color{blue}\boxed{\hat{\beta} = (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y})}$$
+
+\item 
+	\begin{itemize}
+	\item Partimos de la regresión particionada. \\
+
+	Sea el siguiente modelo de regresión:
+	$$\mathbf{y} = \mathbf{X} \beta + \varepsilon = \mathbf{X}_1 \beta + \mathbf{X}_2 \alpha + \varepsilon$$
+
+	Con ecuaciones normales:
+	$$	\begin{bmatrix}
+		\mathbf{X}_1'\mathbf{X}_1 & \mathbf{X}_1'\mathbf{X}_2 \\
+		\mathbf{X}_2'\mathbf{X}_1 & \mathbf{X}_2'\mathbf{X}_2
+		\end{bmatrix}
+		\begin{bmatrix}
+		\hat{\beta} \\
+		\hat{\alpha}
+		\end{bmatrix}
+		=
+		\begin{bmatrix}
+		\mathbf{X}_1'\mathbf{y} \\
+		\mathbf{X}_2'\mathbf{y}
+		\end{bmatrix}$$
+	
+	De estas ecuaciones se desprende que:
+	$$\hat{\beta} = (\mathbf{X}_1'\mathbf{X}_1)^{-1} \mathbf{X}_1' (\mathbf{y} - \mathbf{X}_2 \hat{\alpha} )$$
+	
+	Por el teorema de Frisch-Waugh-Lovel los estimadores MCO serán:
+	$$\hat{\beta} = (\mathbf{X}_1'\mathbf{M}_2\mathbf{X}_1)^{-1} (\mathbf{X}_1'\mathbf{M}_2\mathbf{y})$$
+	$$\hat{\alpha} = (\mathbf{X}_2'\mathbf{M}_1\mathbf{X}_2)^{-1} (\mathbf{X}_2'\mathbf{M}_1\mathbf{y})$$
+	
+	donde:
+	$$\mathbf{M}_1 = \mathbf{I}_n - \mathbf{P}_1 = \mathbf{I}_n - \mathbf{X}_1(\mathbf{X}_1'\mathbf{X}_1)^{-1}\mathbf{X}_1'$$
+	$$\mathbf{M}_2 = \mathbf{I}_n - \mathbf{P}_2 = \mathbf{I}_n - \mathbf{X}_2(\mathbf{X}_2'\mathbf{X}_2)^{-1}\mathbf{X}_2'$$
+		
+	Dado que $\mathbf{M}$ es simétrica e idempotente, podemos escribir:
+	$$\mathbf{X}_2^* = \mathbf{M}_1\mathbf{X}_2$$
+	$$\mathbf{y}_* = \mathbf{M}_1 \mathbf{y}$$
+
+	Por lo que entonces:
+	$$\hat{\beta} = (\mathbf{X}_1'\mathbf{M}_2\mathbf{X}_1)^{-1} (\mathbf{X}_1'\mathbf{M}_2\mathbf{y})$$
+	$$\hat{\alpha} = (\mathbf{X}_2^{*'}\mathbf{X}_2^{*})^{-1} (\mathbf{X}_2^{*'}\mathbf{y}_{*})$$
+	
+	\item El caso particular en que $\mathbf{X}_2 = \mathbf{z}_{n \times 1}$ \\
+	
+	Este es el caso en que $\mathbf{z}$ contiene una sola variable. Para simplificar notación llamaremos $\mathbf{X}_1 = \mathbf{X}$, dado que no hay riesgo de confusión. \\
+	
+	De la regresión: $\mathbf{y} = \mathbf{X} \beta + \mathbf{z} \alpha + \varepsilon$ podemos obtener la estimación del coeficiente asociado a $\mathbf{z}$ siguiendo lo visto anteriormente:
+	$$\hat{\alpha} = (\mathbf{z}'\mathbf{M}\mathbf{z})^{-1} (\mathbf{z}'\mathbf{M}\mathbf{y}) = (\mathbf{z}_*'\mathbf{z}_*)^{-1} (\mathbf{z}_*'\mathbf{y}_*)$$
+	
+	\item Cambio en la SCR al agregar un regresor. \\
+	
+	Sean $\mathbf{\hat{e}}'\mathbf{\hat{e}}$ la SCR de la regresión de $\mathbf{y}$ sobre $\mathbf{X}$, y $\mathbf{\hat{u}}'\mathbf{\hat{u}}$ la SCR de la regresión de $\mathbf{y}$ sobre $\mathbf{X}$ y un regresor adicional $\mathbf{z}$. El vector de residuos de la segunda regresión será entonces $\mathbf{\hat{u}} = \mathbf{y} - \mathbf{X} \check{\beta} - \mathbf{z} \hat{\alpha}$. Por otra parte, de la regresión particionada sabemos que: 
+	$$\check{\beta} = (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' \Big(\mathbf{y} - \mathbf{z} \hat{\alpha} \Big) = \underbrace{(\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y})}_{\hat{\beta}} - (\mathbf{X}'\mathbf{X})^{-1}(\mathbf{X}'\mathbf{z}) \hat{\alpha} = \hat{\beta} - (\mathbf{X}'\mathbf{X})^{-1}(\mathbf{X}'\mathbf{z}) \hat{\alpha}$$
+	
+	Luego entonces, 
+	$$\mathbf{\hat{u}} = \mathbf{y} - \mathbf{X} \Big( \hat{\beta} - (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{z}) \hat{\alpha} \Big) - \mathbf{z} \hat{\alpha} = \underbrace{\mathbf{y} - \mathbf{X} \hat{\beta}}_{\mathbf{\hat{e}}} + \underbrace{\mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}'}_{\mathbf{P}} \mathbf{z} \hat{\alpha} - \mathbf{z} \hat{\alpha} =$$
+	$$= \mathbf{\hat{e}} + \mathbf{P}\mathbf{z} \hat{\alpha} - \mathbf{z} \hat{\alpha} = \mathbf{\hat{e}} + ( \mathbf{P} - \mathbf{I}_{n}) \mathbf{z} \hat{\alpha} = \mathbf{\hat{e}} - \mathbf{M} \mathbf{z} \hat{\alpha} = \mathbf{\hat{e}} - \mathbf{z_*} \hat{\alpha}$$
+	
+	Por lo tanto, 
+	$$\mathbf{\hat{u}}'\mathbf{\hat{u}} = \Big( \mathbf{\hat{e}} - \mathbf{z}_{*} \hat{\alpha} \Big)' \Big( \mathbf{\hat{e}} - \mathbf{z}_{*} \hat{\alpha} \Big) = \mathbf{\hat{e}}'\mathbf{\hat{e}} - \underbrace{\mathbf{\hat{e}}'\mathbf{z_*}}_{1 \times 1} \hat{\alpha} - \hat{\alpha}' \underbrace{\mathbf{z_*}'\mathbf{\hat{e}}}_{1 \times 1} - \hat{\alpha}' \mathbf{z_*}' \mathbf{z_*} \hat{\alpha} =$$
+
+	$$= \mathbf{\hat{e}}'\mathbf{\hat{e}} - 2 \hat{\alpha} (\underbrace{\mathbf{z_*}'\mathbf{\hat{e}}}_{= \mathbf{z_*}' \mathbf{y_*}}) + \hat{\alpha}^2 (\mathbf{z_*}'\mathbf{z_*}) = \mathbf{\hat{e}}'\mathbf{\hat{e}} - 2 \hat{\alpha} (\underbrace{ \mathbf{z_*}' \mathbf{y_*}}_{= \hat{\alpha} (\mathbf{z_*}'\mathbf{z_*})}) + \hat{\alpha}^2 (\mathbf{z_*}'\mathbf{z_*}) =$$
+
+	$$= \mathbf{\hat{e}}'\mathbf{\hat{e}} - 2 \hat{\alpha}^2 (\mathbf{z_*}'\mathbf{z_*}) + \hat{\alpha}^2 (\mathbf{z_*}'\mathbf{z_*}) = \mathbf{\hat{e}}' \mathbf{\hat{e}} - \hat{\alpha}^2 (\mathbf{z_*}'\mathbf{z_*})$$
+
+	Por lo tanto: 
+	$$\mathbf{\hat{u}}'\mathbf{\hat{u}} = \mathbf{\hat{e}}' \mathbf{\hat{e}} - \hat{\alpha}^2 (\mathbf{z_*}'\mathbf{z_*}) \leq \mathbf{\hat{e}}' \mathbf{\hat{e}}$$
+
+	Con lo que queda demostrado que, al agregar un regresor, $\color{red}\downarrow$ SCR $\Rightarrow \color{red}\uparrow$  $R^2$
+	
+	\item Algunas aclaraciones:
+		\begin{itemize}
+		\item En la conclusión se sostuvo que el SCR cae, y por tanto el $R^2$ aumenta. Existe la posibilidad de que el SCR se mantenga incambiado (y por tanto tampoco cambie el $R^2$). Esto se da únicamente si $\mathbf{X}$ y $\mathbf{z}$ son ortogonales (es decir, están incorrelacionadas).
+		
+		\item A la igualdad $\mathbf{z_*}' \hat{\mathbf{e}} = \mathbf{z_*}'\mathbf{y_*}$ se llega recordando que $\hat{\mathbf{e}} = \mathbf{M}\mathbf{y}$ (en el modelo sin la variable $\mathbf{z}$), pero a su vez, $\mathbf{M}\mathbf{y}$ se definió como $\mathbf{y_*}$. Por lo tanto, $\hat{\mathbf{e}} = \mathbf{y_*}$.
+		
+		\item La igualdad $\mathbf{z_*}'\mathbf{y} = \hat{\alpha} (\mathbf{z_*}'\mathbf{z_*})$ se desprende de las ecuaciones normales del modelo que incluye la variable $\mathbf{z}$ (ver segundo item, Regresión Particionada con $\mathbf{X}_2=\mathbf{z}$). La posición de $\hat{\alpha}$ es intercambiable, dado que $\hat{\alpha}$ es un real.
+		
+		\end{itemize}
+	\end{itemize}
+\end{enumerate}
+
+## Ejercicio 10
+
+\begin{enumerate}
+\item Sean $\mathbf{P} = \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}'$ y $\mathbf{M} = \mathbf{I}_n - \mathbf{P}$
+	\begin{itemize}
+	\item $\mathbf{P}' = \Big[ \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' \Big]' = \Big(\mathbf{X}'\Big)' \Big((\mathbf{X}'\mathbf{X})^{-1}\Big)' \Big(\mathbf{X}\Big)' = \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' = \mathbf{P}$
+	
+	\item $\mathbf{P}\mathbf{P} = \Big( \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' \Big) \Big( \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' \Big) = \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \underbrace{(\mathbf{X}' \mathbf{X}) (\mathbf{X}'\mathbf{X})^{-1}}_{\mathbf{I}_{k+1}} \mathbf{X}' =$
+	
+	$= \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{I}_n \mathbf{X}' = \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' = \mathbf{P}$
+	
+	\item $\mathbf{MM} = \Big(\mathbf{I}_n - \mathbf{P}\Big) \Big(\mathbf{I}_n - \mathbf{P}\Big) = \mathbf{I}_n \mathbf{I}_n - \mathbf{I}_n \mathbf{P} - \mathbf{P} \mathbf{I}_n + \mathbf{P P} = \mathbf{I}_n - \mathbf{P} - \mathbf{P} + \mathbf{P} =$
+	
+	$= \mathbf{I}_n - \mathbf{P} = \mathbf{M}$
+	
+	\item $\mathbf{M}' = \Big( \mathbf{I}_n - \mathbf{P} \Big)' = \mathbf{I}_n' - \mathbf{P}' = \mathbf{I}_n - \mathbf{P} = \mathbf{M}$
+	\end{itemize}
+
+\item $E(\mathbf{e}) = E(\mathbf{y} - \mathbf{\hat{y}}) = E(\mathbf{y}) - E(\mathbf{\hat{y}}) = E(\mathbf{y}) - E(\mathbf{Py}) = E(\mathbf{y}) - \mathbf{P}E(\mathbf{y}) $ 
+
+$= \Big( \mathbf{I}_n - \mathbf{P} \Big) E(\mathbf{y}) = \Big( \mathbf{I}_n - \mathbf{P} \Big) \mathbf{X} \beta = \Big( \mathbf{I}_n - \mathbf{X} (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}' \Big) \mathbf{X} \beta = $
+
+$= \Big( \mathbf{X} - \mathbf{X} \underbrace{(\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}' \mathbf{X})}_{\mathbf{I}_{k+1}} \Big) \beta = \Big( \mathbf{X} - \mathbf{X} \Big) \beta = \mathbf{0}_{n \times (k+1)} \, \beta = \mathbf{0}_{n}$
+
+\item 
+	\begin{itemize}
+	\item $V(\mathbf{e}) = V(\mathbf{y} - \mathbf{\hat{y}}) = V(\mathbf{y} - \mathbf{Py}) = V(\mathbf{My}) = \mathbf{M} V(\mathbf{y})\mathbf{M}' = \mathbf{M} \Big( \sigma^2_{\varepsilon} \mathbf{I}_n \Big) \mathbf{M} =$
+	
+	$= \sigma^2_{\varepsilon} \mathbf{MM} = \sigma^2_{\varepsilon} \mathbf{M}$
+	
+	\item $COV(\mathbf{e};\mathbf{y}) = COV( \mathbf{y} - \mathbf{\hat{y}} ; \mathbf{y}) = COV(\mathbf{y};\mathbf{y}) - COV(\mathbf{\hat{y}};\mathbf{y}) =$
+	
+	$= V(\mathbf{y}) - COV(\mathbf{Py};\mathbf{y}) = V(\mathbf{y}) - \mathbf{P}COV(\mathbf{y};\mathbf{y}) = V(\mathbf{y}) - \mathbf{P}V(\mathbf{y}) = $
+	
+	$= \Big( \mathbf{I}_n - \mathbf{P} \Big) V(\mathbf{y}) = \Big( \mathbf{I}_n - \mathbf{P} \Big) \sigma^2_{\varepsilon} \mathbf{I}_n = \sigma^2_{\varepsilon} \Big( \mathbf{I}_n - \mathbf{P} \Big)$
+	
+	\item $COV(\mathbf{e};\mathbf{\hat{y}}) = COV(\mathbf{y} - \mathbf{\hat{y}};\mathbf{\hat{y}}) = COV(\mathbf{y}; \mathbf{\hat{y}}) - V(\mathbf{\hat{y}}) = COV(\mathbf{y}; \mathbf{Py}) - V(\mathbf{\hat{y}}) = $
+	
+	$= V(\mathbf{y})\mathbf{P}' - V(\mathbf{Py}) = V(\mathbf{y}) \mathbf{P} - \mathbf{P} V(\mathbf{y}) \mathbf{P}' = V(\mathbf{y}) \mathbf{P} - \mathbf{P} V(\mathbf{y}) \mathbf{P} =$
+	
+	$= \sigma^2_{\varepsilon} \mathbf{I}_n \mathbf{P} - \mathbf{P} \sigma^2_{\varepsilon} \mathbf{I}_n \mathbf{P} = \sigma^2_{\varepsilon} \mathbf{P} - \sigma^2_{\varepsilon} \mathbf{PP} = \sigma^2_{\varepsilon} \Big( \mathbf{P} - \mathbf{P} \Big) = \sigma^2_{\varepsilon} \mathbf{0}_n = \mathbf{0}_n$
+	\end{itemize}
+
+\item De las CPO del problema de minimización sabemos que: 
+$$\mathbf{X}'\mathbf{X} \hat{\beta} - \mathbf{X}'\mathbf{y} = \mathbf{0}_k \Rightarrow \mathbf{X}'\Big( \mathbf{y} - \mathbf{X} \hat{\beta} \Big) = \mathbf{0}_k \Rightarrow \mathbf{X}' \mathbf{e} = \mathbf{0}_k \Rightarrow \sum \limits_{i=1}^{n} e_i x_{ij} = 0$$
+
+En particular, esto debe cumplirse para $X_1 = (1 \ldots 1)'$, por lo que:
+
+$$\sum \limits_{i=1}^{n} e_i x_{i1} = \sum \limits_{i=1}^{n} e_i 1 = \sum \limits_{i=1}^{n} e_i = 0$$
+
+Por lo tanto: $\bar{e} = \frac{1}{n} \sum \limits_{i=1}^{n} e_i = \frac{1}{n} \, 0 = 0$
+
+\item 
+	\begin{itemize}
+	\item $\mathbf{e'y} = (\mathbf{y} - \mathbf{\hat{y}})'\mathbf{y} = (\mathbf{y} - \mathbf{Py})'\mathbf{y} = \Big( (\mathbf{I}_n - \mathbf{P}) \mathbf{y} \Big)' \mathbf{y} = \mathbf{y}' \mathbf{M}' \mathbf{y} = \mathbf{y}' \mathbf{M} \mathbf{y} $
+	
+	\item $\mathbf{e}'\mathbf{\hat{y}} = \Big( \mathbf{y} - \mathbf{\hat{y}} \Big)' \Big( \mathbf{Py} \Big) = \Big( \mathbf{y} - \mathbf{Py} \Big)' \Big( \mathbf{Py} \Big) = \Big( \mathbf{y}' - \mathbf{y}' \mathbf{P}' \Big) \Big( \mathbf{Py} \Big) = $
+	
+	$= \mathbf{y}'\mathbf{Py} - \mathbf{y}'\mathbf{P}'\mathbf{Py} = \mathbf{y}'\mathbf{Py} - \mathbf{y}'\mathbf{Py} = 0$
+
+	\item $\mathbf{e}'\mathbf{X} = \Big( \mathbf{y} - \mathbf{\hat{y}} \Big)' \mathbf{X} = \Big( \mathbf{y}' - \mathbf{y}'\mathbf{P}' \Big) \mathbf{X} = \mathbf{y}'\mathbf{X} - \mathbf{y}'\mathbf{P}'\mathbf{X} = \mathbf{y}'\mathbf{X} - \mathbf{y}'\mathbf{X} = \mathbf{0}'_{k+1}$
+	\end{itemize}
+
+\item $tr(\mathbf{P}) = tr \Big( \mathbf{X} (\mathbf{X'}\mathbf{X})^{-1} \mathbf{X}' \Big) = tr \Big((\mathbf{X'}\mathbf{X})^{-1} (\mathbf{X}'\mathbf{X}) \Big) = tr(\mathbf{I}_{k+1}) = k+1$
+\end{enumerate}
+
+# Práctico 3
+
+## Ejercicio 3
+
+\begin{enumerate}
+\item 
+	\begin{itemize}
+	\item Por idempotencia de $\mathbf{H}$:
+	$$0 \leq h_{ii} = h_{i1}^2 + h_{i2}^2 + \ldots + h_{ii}^2 + \ldots + h_{in}^2 = h_{ii}^2 + \sum\limits_{\substack{j=1 \\ j \neq i}}^{n} h_{ij}^2 \Rightarrow$$
+	$$\Rightarrow \frac{h_{ii}}{h_{ii}} = \frac{h_{ii}^2}{h_{ii}} + \frac{1}{h_{ii}} \sum\limits_{\substack{j=1 \\ j \neq i}}^{n} h_{ij}^2 \Rightarrow 1 =  h_{ii} + \underbrace{\frac{1}{h_{ii}} \sum\limits_{\substack{j=1 \\ j \neq i}}^{n} h_{ij}^2}_{\geq 0} \Rightarrow h_{ii} \leq 1 $$
+
+	Para probar que $\frac{1}{n} < h_{ii}$ debemos primero centrar $\mathbf{H}$. Sean
+	
+	$$\mathbf{\tilde{X}} = 	\begin{bmatrix}
+							1 & x_{11} - \bar{x}_1 & x_{12} - \bar{x}_2 & \cdots & x_{1k} - \bar{x}_k \\
+							1 & x_{21} - \bar{x}_1 & x_{22} - \bar{x}_2 & \cdots & x_{2k} - \bar{x}_k \\
+							\vdots & \vdots & \vdots & \ddots & \vdots \\
+							1 & x_{n1} - \bar{x}_1 & x_{n2} - \bar{x}_2 & \cdots & x_{nk} - \bar{x}_k \\
+							\end{bmatrix}_{n \times (k+1)} $$
+	
+	$$\mathbf{\tilde{H}} = \mathbf{\tilde{X}}(\mathbf{\tilde{X}}'\mathbf{\tilde{X}})^{-1}\mathbf{\tilde{X}}' =
+																				\begin{bmatrix}
+																				\tilde{h}_{11} & \cdots & \tilde{h}_{1n} \\
+																				\vdots & \ddots & \vdots \\
+																				\tilde{h}_{n1} & \cdots & \tilde{h}_{nn}
+																				\end{bmatrix}_{n \times n}$$
+			
+	y el modelo 
+	$$\mathbf{y} = \alpha \mathbf{\mathbb{1}}_n + \mathbf{\tilde{X}} \beta + \varepsilon \Rightarrow \hat{\mathbf{y}} = \hat{\alpha} \; \mathbf{\mathbb{1}}_n + \mathbf{\tilde{X}} \hat{\beta} \Rightarrow \hat{\mathbf{y}} = \bar{y} \; \mathbf{\mathbb{1}}_n + \mathbf{\tilde{X}} \hat{\beta} = \bar{y} \; \mathbf{\mathbb{1}}_n + \mathbf{\tilde{X}}(\mathbf{\tilde{X}}'\mathbf{\tilde{X}})^{-1}(\mathbf{\tilde{X}}'\mathbf{y}) \Rightarrow$$
+	
+	$$\Rightarrow \hat{\mathbf{y}} = \left[ \frac{1}{n} \Big( \mathbf{\mathbb{1}}'_n \mathbf{y} \Big) \right] \mathbf{\mathbb{1}}_n + \mathbf{\tilde{H}} \mathbf{y} = \left( \frac{1}{n}	\begin{bmatrix}
+													1 & \cdots & 1 \\
+													\vdots & \ddots & \vdots \\
+													1 & \cdots & 1
+													\end{bmatrix}_{(n \times n)} + \mathbf{\tilde{H}} \right) \mathbf{y} = \mathbf{H} \mathbf{y}$$
+	
+	Por lo tanto
+	
+	$$\mathbf{H} = \frac{1}{n}	\begin{bmatrix}
+								1 & \cdots & 1 \\
+								\vdots & \ddots & \vdots \\
+								1 & \cdots & 1
+								\end{bmatrix}_{(n \times n)} + \mathbf{\tilde{H}} 
+								=
+								\begin{bmatrix}
+								1 & \cdots & 1 \\
+								\vdots & \ddots & \vdots \\
+								1 & \cdots & 1
+								\end{bmatrix}_{(n \times n)}
+								+
+								\begin{bmatrix}
+								\tilde{h}_{11} & \cdots & \tilde{h}_{1n} \\
+								\vdots & \ddots & \vdots \\
+								\tilde{h}_{n1} & \cdots & \tilde{h}_{nn}
+								\end{bmatrix}_{n \times n}
+								=$$
+								
+								$$=
+								\begin{bmatrix}
+								\tilde{h}_{11} + \frac{1}{n}& \cdots & \tilde{h}_{1n} +\frac{1}{n} \\
+								\vdots & \ddots & \vdots \\
+								\tilde{h}_{n1} + \frac{1}{n} & \cdots & \tilde{h}_{nn} + \frac{1}{n}
+								\end{bmatrix}_{n \times n}
+								$$
+	
+	\vspace{0.5cm}
+	
+	Luego, dado que 
+	
+	$$\left. \begin{array}{l}
+				h_{ii} = \tilde{h}_{ii} + \frac{1}{n} \\
+				h_{ii} \geq 0 \text{ por idempotencia de } \mathbf{H} \\
+				\tilde{h}_{ii} \geq 0 \text{ por idempotencia de } \mathbf{\tilde{H}}
+				\end{array} \right\} \Rightarrow h_{ii} \geq \frac{1}{n}$$
+	
+	\vspace{0.5cm}
+	
+	Podemos concluir entonces que:
+	$$\color{blue}\boxed{\frac{1}{n} \leq h_{ii} \leq 1}$$
+
+	\item Por idempotencia de $\mathbf{H}$:
+	$$h_{ii} = h_{ii}^2 + h_{ij}^2+ \sum\limits_{\substack{k=1 \\ k \neq i \\ k \neq j}}^{n} h_{ik}^2 \Rightarrow \underbrace{h_{ii} (1-h_{ii})}_{\leq ^1/_4} = h_{ij}^2 + \sum\limits_{\substack{k=1 \\ k \neq i \\ k \neq j}}^{n} h_{ik}^2 $$
+	$$\text{Si } h_{ii} (1-h_{ii}) = \frac{1}{4} \Rightarrow h_{ii} = \frac{1}{2} \Rightarrow h_{ij}^2 < \frac{1}{4} \Rightarrow \color{blue}\boxed{-\frac{1}{2} < h_{ij} < \frac{1}{2} \; \; \forall i \neq j}$$
+	\end{itemize}
+
+\item En la regresión lineal simple:
+
+$$\mathbf{H} = \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}' = 
+	\begin{bmatrix}
+	1 & x_1 \\
+	1 & x_2 \\
+	\vdots & \vdots \\
+	1 & x_n
+	\end{bmatrix}
+	\begin{bmatrix}
+	n & \sum\limits_{i=1}^{n} x_i \\
+	\sum\limits_{i=1}^{n} x_i & \sum\limits_{i=1}^{n} x_i^2
+	\end{bmatrix}^{-1}
+	\begin{bmatrix}
+	1 & 1 & \cdots & 1 \\
+	x_1 & x_2 & \cdots & x_n
+	\end{bmatrix}
+	=$$
+
+$$= 
+	\begin{bmatrix}
+	1 & x_1 \\
+	1 & x_2 \\
+	\vdots & \vdots \\
+	1 & x_n
+	\end{bmatrix}
+	\begin{bmatrix}
+	\frac{\sum\limits_{i=1}^{n} x_i^2}{n^2 \, S^2_X} & -\frac{\sum\limits_{i=1}^{n} x_i}{n^2 \, S^2_X} \\[1.5em]
+	-\frac{\sum\limits_{i=1}^{n} x_i}{n^2 \, S^2_X} & \frac{n}{n^2 \, S^2_X}
+	\end{bmatrix}
+	\begin{bmatrix}
+	1 & 1 & \cdots & 1 \\
+	x_1 & x_2 & \cdots & x_n
+	\end{bmatrix}
+=$$
+
+$$=
+	\begin{bmatrix}
+	\frac{\sum\limits_{i=1}^{n} x_i^2 - x_1 \sum\limits_{i=1}^{n} x_i}{n^2 \, S^2_X} & \frac{-\sum\limits_{i=1}^{n} x_i + nx_1} {n^2 \, S^2_X} \\[1.5em]
+	\vdots & \vdots \\[1.5em]
+	\frac{\sum\limits_{i=1}^{n} x_i^2 - x_n \sum\limits_{i=1}^{n} x_i}{n^2 \, S^2_X} & \frac{-\sum\limits_{i=1}^{n} x_i + nx_n} {n^2 \, S^2_X}
+	\end{bmatrix}
+	\begin{bmatrix}
+	1 & 1 & \cdots & 1 \\
+	x_1 & x_2 & \cdots & x_n
+	\end{bmatrix}
+=$$
+
+$$=
+	\begin{bmatrix}
+	\frac{\sum\limits_{i=1}^{n} x_i^2 - x_1 \sum\limits_{i=1}^{n} x_i - x_1 \sum\limits_{i=1}^{n} x_i + nx_1^2}{n^2 \, 	S^2_X}  & & & \\[1.5em]
+	\frac{\sum\limits_{i=1}^{n} x_i^2 - x_2 \sum\limits_{i=1}^{n} x_i - x_1 \sum\limits_{i=1}^{n} x_i + nx_1x_2}{n^2 \, S^2_X} & & & \\[1.5em]
+	\vdots & & & \\[1.5em]
+	\vdots & & & \\[1.5em]
+	\frac{\sum\limits_{i=1}^{n} x_i^2 - x_n \sum\limits_{i=1}^{n} x_i - x_1 \sum\limits_{i=1}^{n} x_i + nx_1x_n}{n^2 \, S^2_X} & \cdots & \cdots & \frac{\sum\limits_{i=1}^{n} x_i^2 - x_n \sum\limits_{i=1}^{n} x_i - x_n \sum\limits_{i=1}^{n} x_i + nx_n^2}{n^2 \, S^2_X}
+	\end{bmatrix}_{n \times n}$$
+
+Operando con el $i$-ésimo elemento de la diagonal, obtenemos que:
+
+$$h_{ii} = \frac{\sum\limits_{i=1}^{n} x_i^2 - x_i \sum\limits_{i=1}^{n} x_i - x_i \sum\limits_{i=1}^{n} x_i + nx_i^2}{n^2 \, S^2_X} = \frac{\sum\limits_{i=1}^{n} x_i^2 - 2 x_i \sum\limits_{i=1}^{n} x_i + nx_i^2}{n^2 \, S^2_X}=$$
+$$= \frac{\sum\limits_{i=1}^{n} x_i^2 - n \bar{x}^2 - 2 x_i \sum\limits_{i=1}^{n} x_i + nx_i^2 + n \bar{x}^2}{n^2 \, S^2_X}= \frac{n S^2_X}{n^2 \, S^2_X} + \frac{-2x_i n \bar{x} + n x_i^2 + n \bar{x}^2}{n^2 \, S^2_X} =$$
+
+$$= \frac{1}{n} + \frac{n \Big(x_i - \bar{x} \Big)^2}{n^2 \, S^2_X} \Rightarrow \color{blue}\boxed{h_{ii} = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{n \, S^2_X}}$$
+
+Operando con el $ij$-ésimo elemento fuera de la diagonal, obtenemos que:
+
+$$h_{ij} = \frac{\sum\limits_{i=1}^{n} x_i^2 - x_i \sum\limits_{i=1}^{n} x_i - x_j \sum\limits_{i=1}^{n} x_i + nx_i^2}{n^2 \, S^2_X} = \frac{\sum\limits_{i=1}^{n} x_i^2 - n \bar{x}^2 - x_i \sum\limits_{i=1}^{n} x_i - x_j \sum\limits_{i=1}^{n} x_i + nx_ix_j + n \bar{x}^2}{n^2 \, S^2_X} =$$
+
+$$=\frac{nS^2_X}{n^2 \, S^2_X} + \frac{n(x_i - \bar{x})(x_j - \bar{x})}{n^2 \, S^2_X} \Rightarrow \color{blue}\boxed{h_{ij} = \frac{1}{n} + \frac{(x_i - \bar{x})(x_j - \bar{x})}{n \, S^2_X}}$$
+
+\item Esta relación es más sencilla de visualizar si vemos la matriz $\mathbf{\tilde{X}}$ por filas y a la matriz $(\mathbf{\tilde{X}}' \mathbf{\tilde{X}})^{-1}$ por columnas:
+
+\begin{center}
+	\begin{tabular}{c c}
+	$\mathbf{\tilde{X}} = \begin{bmatrix}
+						\text{\textbf{\------}} & \mathbf{\tilde{x}_1} & \text{\textbf{\------}} \\
+						\text{\textbf{\------}} & \mathbf{\tilde{x}_2} & \text{\textbf{\------}} \\
+						& \vdots & \\
+						\text{\textbf{\------}} & \mathbf{\tilde{x}_n} & \text{\textbf{\------}}
+						\end{bmatrix}_{n \times k} $
+	&
+	$(\mathbf{\tilde{X}}' \mathbf{\tilde{X}})^{-1} = 	\begin{bmatrix}
+													\Big| & \Big| & & \Big| \\
+													\mathbf{a_1} & \mathbf{a_2} & \cdots & \mathbf{a_k} \\
+													\Big| & \Big| & & \Big|
+													\end{bmatrix}_{k \times k}$
+	\end{tabular}
+\end{center}
+
+Luego el $ii$-ésimo elemento de $\mathbf{\tilde{H}}$ está dado por $h_{ii} = \frac{1}{n} + \tilde{h}_{ii}$ (tal como se demostró en la parte 1), donde:
+
+$$\tilde{h}_{ii} = \mathbf{\tilde{x}_i}' \; \mathbf{a_1} \; \mathbf{\tilde{x}_i} + \mathbf{\tilde{x}_i}' \; \mathbf{a_2} \; \mathbf{\tilde{x}_i} + \ldots + \mathbf{\tilde{x}_i}' \; \mathbf{a_k} \; \mathbf{\tilde{x}_i}$$
+
+Por lo tanto:
+
+$$\tilde{h}_{ii} = \mathbf{\tilde{x}_i}' \; (\mathbf{\tilde{X}}' \mathbf{\tilde{X}})^{-1} \mathbf{\tilde{x}_i}$$
+
+Luego entonces: 
+
+$$h_{ii} = \frac{1}{n} + \mathbf{\tilde{x}_i}' \; (\mathbf{\tilde{X}}' \mathbf{\tilde{X}})^{-1} \mathbf{\tilde{x}_i} = \frac{1}{n} \left( 1 + \mathbf{\tilde{x}_i}' \; \mathbf{\hat{\Sigma}}^{-1} \mathbf{\tilde{x}_i}\right) \Rightarrow \color{blue}\boxed{\tilde{h}_{ii} = \frac{1}{n} \Big( 1 + \hat{D}_i^2 \Big)}$$
+\end{enumerate}
+
+## Ejercicio 4
+
+$$Df\!fits_i = \frac{|\hat{y}_i - \hat{y}_{i(i)}|}{\sqrt{S^2_{(i)}h_{ii}}} = \frac{| y_i - e_i - y_i + e_{(i)}|}{\sqrt{S^2_{(i)}h_{ii}}} = \frac{|e_{(i)} - e_i|}{\sqrt{S^2_{(i)}h_{ii}}} = \frac{ \Big| \frac{e_i}{1-h_{ii}} - e_i \Big|}{\sqrt{S^2_{(i)}h_{ii}}} = \frac{ \Big| \frac{e_i - e_i(1-h_{ii})}{1-h_{ii}} \Big|}{\sqrt{S^2_{(i)}h_{ii}}} =$$
+
+$$= \frac{ \Big| \frac{e_i h_{ii}}{1-h_{ii}} \Big|}{\sqrt{S^2_{(i)}h_{ii}}} = \frac{ \frac{h_{ii}}{\sqrt{1-h_{ii}}} \Big| \frac{e_i}{\sqrt{1-h_{ii}}} \Big|}{\sqrt{S^2_{(i)}h_{ii}}} = \frac{\sqrt{h_{ii}}}{\sqrt{1-h_{ii}}} \left| \frac{e_i}{\sqrt{S^2_{(i)} (1 - h_{ii})}} \right| = |t_i| \sqrt{\frac{h_{ii}}{1 - h_{ii}}}$$
+
+# Práctico 4
+
+## Ejercicio 4
+
+\begin{enumerate}
+\item Expresión de $F_0$ para la prueba $H_0: \, \beta_2 = 0$
+
+$$F_0 = \frac{\Big( \mathbf{R} \hat{\beta} - \mathbf{r} \Big)' \Big(\mathbf{R} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{R} \Big)^{-1} \Big(\mathbf{R} \hat{\beta} - \mathbf{r} \Big)/ q}{\mathbf{\hat{u}'\mathbf{\hat{u}}}/(n-k-1)}$$
+
+Teniendo en cuenta que:
+	\begin{itemize}
+	\item $q=1$
+	\item $\mathbf{r}_{q \times 1} \Rightarrow \mathbf{r}_{1 \times 1} = r = 0$
+	\item $\mathbf{R}_{q \times (k+1)} = \begin{pmatrix} 0 & 0 & 1 \end{pmatrix}$
+	\item $\hat{\beta} = \begin{pmatrix} \hat{\beta}_0& \hat{\beta}_1 & \hat{\beta}_2 \end{pmatrix}'$
+	\item $(\mathbf{X}'\mathbf{X})^{-1} = \begin{pmatrix} 	\frac{31}{4} 	& -\frac{27}{4} 	& \frac{5}{4}	\\[1.5em]
+														-\frac{27}{4} 	& \frac{129}{20} 	& -\frac{5}{4}	\\[1.5em]
+														\frac{5}{4} 	& -\frac{5}{4} 		& \frac{1}{4} 
+									\end{pmatrix}$
+	\item $\mathbf{R} (\mathbf{X}'\mathbf{X})^{-1}\mathbf{R}' = \frac{1}{4}$
+	\end{itemize}
+
+Llegamos a que:
+$$F_0 = \frac{4 \hat{\beta}_2^2}{\mathbf{\hat{u}}'\mathbf{\hat{u}} / (n-k-1)}$$
+
+\item Expresión de $F_0$ para la prueba $H_0: \, \beta_1 = \beta_2$
+
+$$F_0 = \frac{\Big( \mathbf{R} \hat{\beta} - \mathbf{r} \Big)' \Big(\mathbf{R} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{R} \Big)^{-1} \Big(\mathbf{R} \hat{\beta} - \mathbf{r} \Big)/ q}{\mathbf{\hat{u}'\mathbf{\hat{u}}}/(n-k-1)}$$
+
+Teniendo en cuenta que:
+	\begin{itemize}
+	\item $q=1$
+	\item $\mathbf{r}_{q \times 1} \Rightarrow \mathbf{r}_{1 \times 1} = r = 0$
+	\item $\mathbf{R}_{q \times (k+1)} = \begin{pmatrix} 0 & 1 & -1 \end{pmatrix}$
+	\item $\hat{\beta} = \begin{pmatrix} \hat{\beta}_0& \hat{\beta}_1 & \hat{\beta}_2 \end{pmatrix}'$
+	\item $(\mathbf{X}'\mathbf{X})^{-1} = \begin{pmatrix} 	\frac{31}{4} 	& -\frac{27}{4} 	& \frac{5}{4}	\\[1.5em]
+														-\frac{27}{4} 	& \frac{129}{20} 	& -\frac{5}{4}	\\[1.5em]
+														\frac{5}{4} 	& -\frac{5}{4} 		& \frac{1}{4} 
+									\end{pmatrix}$
+	\item $\mathbf{R} (\mathbf{X}'\mathbf{X})^{-1}\mathbf{R}' = \frac{46}{5}$
+	\end{itemize}
+
+Llegamos a que:
+$$F_0 = \frac{5}{46} \, \frac{\Big( \hat{\beta}_1 - \hat{\beta}_2 \Big)^2}{\mathbf{\hat{u}'\mathbf{\hat{u}}}/(n-k-1)}$$
+\end{enumerate}
+
+## Ejercicio 5
+
+Las matrices de datos:
+\begin{center}
+	\begin{tabular}{c c c c c}
+	$\mathbf{X} =	\begin{bmatrix}
+				1 & 1 \\
+				2 & 1 \\
+				-1 & 1 \\
+				2 & -1
+				\end{bmatrix}$
+	&
+	$\mathbf{y} =	\begin{bmatrix}
+				6.6 \\
+				7.8 \\
+				2.1 \\
+				0.4
+				\end{bmatrix}$
+	&
+	$\Rightarrow$
+	&
+	$(\mathbf{X}'\mathbf{X})^{-1} =	\begin{bmatrix}
+								0.1 & 0 \\
+								0 & 0.25
+								\end{bmatrix}$
+	&
+	$(\mathbf{X}'\mathbf{y}) =	\begin{bmatrix}
+							20.9 \\
+							16.1
+							\end{bmatrix}$
+	\end{tabular}
+\end{center}
+
+Por lo tanto, $\hat{\beta} = 	\begin{pmatrix}
+								2.090 \\
+								4.025
+								\end{pmatrix}$ y $\hat{\sigma}_{u} = 0.4932$
+
+Para hallar el estadístico de prueba, partimos de:
+
+$$F_0 = \frac{\Big( \mathbf{R} \hat{\beta} - \mathbf{r} \Big)' \Big(\mathbf{R} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{R} \Big)^{-1} \Big(\mathbf{R} \hat{\beta} - \mathbf{r} \Big)/ q}{\mathbf{\hat{u}'\mathbf{\hat{u}}}/(n-k-1)}$$
+
+Teniendo en cuenta que:
+\begin{itemize}
+	\item $q=1$
+	\item $\mathbf{r}_{q \times 1} \Rightarrow \mathbf{r}_{1 \times 1} = r = 0$
+	\item $\mathbf{R}_{q \times (k+1)} = \begin{pmatrix} -2 & 1 \end{pmatrix}$
+	\item $\mathbf{R} (\mathbf{X}'\mathbf{X})^{-1}\mathbf{R}' = 0.65$
+	\end{itemize}
+
+Llegamos a que:
+$$F_0 = \frac{1}{0.65} \frac{\Big(-2\hat{\beta}_1 + \hat{\beta}_2 \Big)^2 }{0.4932^2} = 0.1520$$
+
+Luego: $F_{1;2}(1-\alpha) = 38.5063 > 0.1520 = F_0 \Rightarrow$ no rechazo $H_0$
+
+## Ejercicio 6
+
+\begin{itemize}
+\item Bajo $H_0:$ $\mathbf{X} \beta = \mathbf{0}_{n} \Rightarrow \mathbf{y} = \varepsilon \Rightarrow SSR_{H_0} = \mathbf{y}'\mathbf{y}$
+
+Por otra parte, $SCT_{SR} = SCE_{SR} + SCR_{SR} \Rightarrow \mathbf{y}'\mathbf{y} - n\bar{y}^2 = SCR_{SR} + \mathbf{\hat{y}}'\mathbf{\hat{y}} - n\bar{y}^2 \Rightarrow$
+
+$\Rightarrow \mathbf{y}'\mathbf{y} = SCR_{SR} + \mathbf{\hat{y}}'\mathbf{\hat{y}} \Rightarrow \mathbf{y}'\mathbf{y} = SRC_{SR} + (\mathbf{X} \hat{\beta})'\mathbf{X} \hat{\beta} \Rightarrow \mathbf{y}'\mathbf{y} = SRC_{SR} + \hat{\beta}'\mathbf{X}'\mathbf{X}\hat{\beta} \Rightarrow$
+
+$\Rightarrow \mathbf{y}'\mathbf{y} = SRC_{SR} + \hat{\beta}' (\mathbf{X}'\mathbf{X}) \Big( (\mathbf{X}'\mathbf{X})^{-1} (\mathbf{X}'\mathbf{y} \Big) = SRC_{SR} + \hat{\beta}' \underbrace{ (\mathbf{X}'\mathbf{X}) (\mathbf{X}'\mathbf{X})^{-1}}_{\mathbf{I}_k} (\mathbf{X}'\mathbf{y}) \Rightarrow$
+
+$\Rightarrow \mathbf{y}'\mathbf{y} = SRC_{SR} + \hat{\beta}' \mathbf{X}' \mathbf{y}$
+
+Luego entonces, $SCR_{H_0} = SRC_{SR} + \hat{\beta}' \mathbf{X}' \mathbf{y} \Rightarrow \color{blue}\boxed{\hat{\beta}' \mathbf{X}' \mathbf{y} = SCR_{H_0} - SRC_{SR}}$
+
+\item Estadístico $F_0$
+
+$$F_0 = \frac{\Big( \mathbf{R} \hat{\beta} - \mathbf{r} \Big)' \Big(\mathbf{R} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{R} \Big)^{-1} \Big(\mathbf{R} \hat{\beta} - \mathbf{r} \Big)/ q}{\mathbf{\hat{u}'\mathbf{\hat{u}}}/(n-k-1)}$$
+
+Teniendo en cuenta que:
+	\begin{itemize}
+	\item $q=k+1$
+	\item $\mathbf{r}_{q \times 1} \Rightarrow \mathbf{r}_{k+1 \times 1} = \mathbf{0}_{k+1}$
+	\item $\mathbf{R}_{q \times (k+1)} = \mathbf{I}_{k+1}$
+	\item $\hat{\beta} = \begin{pmatrix} \hat{\beta}_0 & \hat{\beta}_1 & \cdots & \hat{\beta}_{k} \end{pmatrix}'$
+	\item $\mathbf{R} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{R}' = \mathbf{I}_{k+1} (\mathbf{X}'\mathbf{X})^{-1} \mathbf{I}_{k+1}'= (\mathbf{X}'\mathbf{X})^{-1}$
+	\end{itemize}
+
+Llegamos a que:
+$$F_0 = \frac{\hat{\beta}' \Big( (\mathbf{X}'\mathbf{X})^{-1} \Big)^{-1} \hat{\beta} / (k+1) }{\mathbf{\hat{u}'\mathbf{\hat{u}}}/(n-k-1)} \Rightarrow \color{blue}\boxed{F_0 = \frac{\hat{\beta}' (\mathbf{X}'\mathbf{X}) \hat{\beta} / (k+1) }{\mathbf{\hat{u}'\mathbf{\hat{u}}}/(n-k-1)}}$$
+
+\end{itemize}

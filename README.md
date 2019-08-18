@@ -2,5 +2,5 @@
 Materiales del curso de Modelos Lineales  
 IESTA - FCEA - UDELAR  
 Edición 2017  
-Coautora [@lcoudet](https://github.com/lcoudet) 
+Coautora [@lcoudet](https://github.com/lcoudet)  
 

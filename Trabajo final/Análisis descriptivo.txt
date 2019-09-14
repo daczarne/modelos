@@ -1,0 +1,19 @@
+      educ       fuma          gest      
+ Min.   : 0.00   no:846   Min.   :20.00  
+ 1st Qu.:11.00   si:269   1st Qu.:38.00  
+ Median :12.00            Median :39.00  
+ Mean   :12.27            Mean   :38.84  
+ 3rd Qu.:13.00            3rd Qu.:40.00  
+ Max.   :17.00            Max.   :43.00  
+      peso     
+ Min.   : 284  
+ 1st Qu.:2900  
+ Median :3267  
+ Mean   :3220  
+ 3rd Qu.:3630  
+ Max.   :4830  
+# A tibble: 2 × 5
+    fuma   obs  educ  gest    peso
+  <fctr> <int> <dbl> <dbl>   <dbl>
+1     no   846 12.53 39.06 3301.00
+2     si   269 11.43 38.15 2963.34

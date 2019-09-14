@@ -1,0 +1,49 @@
+
+#############################################################################
+#Intervalo de confianza para la recta de regresi?n e intervalo de predicci?n#
+#############################################################################
+
+#Primer Ejemplo (visto en la clase 1)
+
+X=cbind(seq(100,190,10),c(45,51,54,61,66,70,74,78,85,89))
+X=as.data.frame(X)
+colnames(X)=c("Temp","Rend")
+plot(X,xlab="Temperatura (grados celcius)",ylab="Rendimiento",main=paste("Primer Ejemplo"))
+modelo=lm(Rend~Temp,data=X)
+summary(modelo)
+abline(modelo,col="red",lwd=2)
+
+
+pred <- predict(modelo, interval="confidence")
+lines(X[,1], pred[, 2], col = "blue", lwd = 2)
+lines(X[,1], pred[, 3], col = "blue", lwd = 2) 
+
+
+#Segundo ejemplo:datos simulados
+
+n <- 50
+x <- sort(10 * runif(n)) 
+y <- 2 + 3 * x + rnorm(n, sd = 5)
+
+# Fit & plot model  
+fit <- lm(y ~ x)
+
+plot(x, y, pch = 19)                      
+abline(2, 3, lwd = 2)                    
+abline(coef(fit), lwd = 2, col = 'red')
+legend("topleft", c("verdadera", "estimaci?n"), lty = 1, lwd = 2, col = c(1, 2))
+
+new=data.frame(x=seq(0, 10, .5))
+
+pred=predict(fit, interval="confidence")
+pred2=predict(fit,newdata=new,interval="prediction")
+lines(x, pred[, 2], col = "blue", lwd = 2)
+lines(x, pred[, 3], col = "blue", lwd = 2) 
+lines(new[,1], pred2[, 2], col = "green", lwd = 2)
+lines(new[,1], pred2[, 3], col = "green", lwd = 2) 
+title("Ejemplo Simulado")
+
+
+
+
+

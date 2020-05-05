@@ -1,8 +1,8 @@
 # Modelos Lineales  
 
 ![archived](https://img.shields.io/badge/lifecycle-archived-red.svg)  
-![languages](https://img.shields.io/github/languages/count/daczarne/modelos)   
-![top language](https://img.shields.io/github/languages/top/daczarne/modelos)   
+![languages](https://img.shields.io/github/languages/count/daczarne/udelar_modelos_lineales)   
+![top language](https://img.shields.io/github/languages/top/daczarne/udelar_modelos_lineales)   
 
 Materiales del curso de Modelos Lineales  
 IESTA - FCEA - UDELAR  

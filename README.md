@@ -1,8 +1,16 @@
 # Modelos Lineales  
 
-![archived](https://img.shields.io/badge/lifecycle-archived-red.svg)  
-![languages](https://img.shields.io/github/languages/count/daczarne/udelar_modelos_lineales)   
-![top language](https://img.shields.io/github/languages/top/daczarne/udelar_modelos_lineales)   
+
+![archived](https://img.shields.io/badge/lifecycle-archived-red.svg)
+
+
+![languages](https://img.shields.io/github/languages/count/daczarne/udelar_modelos_lineales)
+![top language](https://img.shields.io/github/languages/top/daczarne/udelar_modelos_lineales) 
+
+
+![repo size](https://img.shields.io/github/repo-size/daczarne/udelar_modelos_lineales)
+![code size](https://img.shields.io/github/languages/code-size/daczarne/udelar_modelos_lineales)
+
 
 Materiales del curso de Modelos Lineales  
 IESTA - FCEA - UDELAR  
